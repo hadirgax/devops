@@ -8,6 +8,7 @@ winget install --id FastStone.Viewer
 winget install --id Git.Git
 winget install --id Google.Chrome
 winget install --id Google.GoogleDrive
+winget install --id JetBrains.Toolbox
 winget install --id Neovim.Neovim
 winget install --id Microsoft.DotNet.DesktopRuntime.6
 winget install --id Microsoft.PowerShell
