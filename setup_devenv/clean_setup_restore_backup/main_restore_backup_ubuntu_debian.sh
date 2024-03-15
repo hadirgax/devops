@@ -32,11 +32,11 @@ function set_nameserver {
 function update_and_install {
     echo
     echo ">>>>> Installing tools... >>>>>"
-    # install_packages_and_tools
+    install_packages_and_tools
 
     echo
     echo ">>>>> Installing Latest Version of GIT... >>>>>"
-    # install_latest_git
+    install_latest_git
     echo ">>>>> Testing git installation... >>>>>"
     git --version
 
@@ -65,48 +65,26 @@ function install_packages_and_tools {
     && sudo apt-get install -q -y --no-install-recommends \
         apt-transport-https \
         build-essential \
-        bzip2 \
         ca-certificates \
         cmake \
-        curl \
-        dconf-cli \
-        dh-autoreconf \
+        dirmngr \
         gettext \
-        gnupg \
-        gstreamer1.0-libav \
-        htop \
-        install-info \
-        libatk-bridge2.0-0 \
-        libcups2-dev \
+        gnupg2 \
         libcurl?-openssl-dev \
-        libdbus-glib-1-2 \
         libexpat1-dev \
-        libgbm-dev \
-        libglib2.0-0 \
-        libgtk-3-0 \
-        libnss3-tools \
         libpcre2-dev \
-        libsm6 \
         libssl-dev \
-        libx11-xcb1 \
-        libxcomposite-dev \
-        libxext6 \
-        libxkbcommon-x11-0 \
-        libxrandr2 \
-        libxrender1 \
-        libxtst6 \
-        libz-dev \
-        net-tools \
-        netcat \
         openssh-client \
-        procps \
-        rsync \
-        subversion \
-        tar \
-        wget \
         zlib1g-dev \
         zsh \
     && sudo apt-get upgrade -yq
+        # bzip2 \# curl \# dconf-cli \# dh-autoreconf \# gstreamer1.0-libav \
+        # htop \# install-info \# libatk-bridge2.0-0 \# libcups2-dev \
+        # libdbus-glib-1-2 \# libgbm-dev \# libglib2.0-0 \# libgtk-3-0 \
+        # libnss3-tools \# libsm6 \# libx11-xcb1 \
+        # libxcomposite-dev \# libxext6 \# libxkbcommon-x11-0 \# libxrandr2 \# libxrender1 \
+        # libxtst6 \# libz-dev \# net-tools \# netcat \# procps \# rsync \
+        # subversion \# tar \# wget \
 }
 
 
@@ -206,11 +184,11 @@ function configuring_oh_my_zsh() {
 
 
 function install_miniconda() {
-    echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.bashrc"
-    echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.zshrc"
+    # echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.bashrc"
+    # echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.zshrc"
 
-    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-    SHA256SUM="c9ae82568e9665b1105117b4b1e499607d2a920f0aea6f94410e417a0eff1b9c"
+    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-py312_24.1.2-0-Linux-x86_64.sh"
+    SHA256SUM="b978856ec3c826eb495b60e3fffe621f670c101150ebcbdeede4f961f22dc438"
 
     MINICONDA_TMP_FILE=/tmp/miniconda.sh
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
@@ -220,15 +198,17 @@ function install_miniconda() {
     sudo bash ${MINICONDA_TMP_FILE} -b -p /opt/conda && \
     rm ${MINICONDA_TMP_FILE} /tmp/shasum && \
     sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.zshrc && \
-    echo "conda activate base" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.zshrc && \
+    /opt/conda/bin/conda init bash && \
+    /opt/conda/bin/conda init zsh && \
+    # echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    # echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.zshrc && \
+    # echo "conda activate base" >> ~/.bashrc && \
+    # echo "conda activate base" >> ~/.zshrc && \
     sudo find /opt/conda/ -follow -type f -name '*.a' -delete && \
     sudo find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 
-    conda config --set solver libmamba
+    /opt/conda/bin/conda config --set solver libmamba
 
 }
 
