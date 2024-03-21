@@ -10,6 +10,7 @@ winget install --id Google.Chrome
 winget install --id Google.GoogleDrive
 winget install --id JetBrains.Toolbox
 winget install --id Neovim.Neovim
+winget install --id Notion.Notion
 winget install --id Microsoft.DotNet.DesktopRuntime.6
 winget install --id Microsoft.PowerShell
 winget install --id Microsoft.Teams
