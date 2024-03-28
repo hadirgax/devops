@@ -22,7 +22,6 @@ RUN set -eux; \
         procps \
         subversion \
         wget \
-        tzdata \
     ; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
