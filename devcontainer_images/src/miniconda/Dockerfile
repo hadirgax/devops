@@ -6,7 +6,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 # hadolint ignore=DL3008
 RUN set -eux; \
-    apt-get update -q; \
+    apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         bzip2 \
         ca-certificates \
@@ -22,16 +22,18 @@ RUN set -eux; \
         procps \
         subversion \
         wget \
-    ; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH /opt/conda/bin:$PATH
 
 CMD [ "/bin/bash" ]
 
 RUN set -x && \
-    wget "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" -O miniconda.sh -q && \
+    MINICONDA_URL = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    SHA256SUM = "b978856ec3c826eb495b60e3fffe621f670c101150ebcbdeede4f961f22dc438"
+    wget "${MINICONDA_URL}" -O miniconda.sh -q && \
+    echo "${SHA256SUM} miniconda.sh" > shasum && \
     mkdir -p /opt && \
     bash miniconda.sh -b -p /opt/conda && \
     rm miniconda.sh shasum && \
