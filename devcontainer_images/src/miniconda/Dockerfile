@@ -30,8 +30,8 @@ ENV PATH /opt/conda/bin:$PATH
 CMD [ "/bin/bash" ]
 
 RUN set -x && \
-    MINICONDA_URL = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
-    SHA256SUM = "b978856ec3c826eb495b60e3fffe621f670c101150ebcbdeede4f961f22dc438" && \
+    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
+    SHA256SUM="b978856ec3c826eb495b60e3fffe621f670c101150ebcbdeede4f961f22dc438" && \
     wget "${MINICONDA_URL}" -O miniconda.sh -q && \
     echo "${SHA256SUM} miniconda.sh" > shasum && \
     mkdir -p /opt && \
