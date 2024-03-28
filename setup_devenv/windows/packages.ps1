@@ -2,6 +2,7 @@
 winget install --id 7zip.7Zip
 winget install --id Brave.Brave
 winget install --id calibre.calibre
+winget install --id dbeaver.dbeaver
 winget install --id Docker.DockerDesktop
 winget install --id alexx2000.DoubleCommander
 winget install --id FastStone.Viewer
