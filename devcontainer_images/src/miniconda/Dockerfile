@@ -36,10 +36,7 @@ ENV PATH /opt/conda/bin:$PATH
 
 ARG USERNAME=devcon
 ARG USER_HOME="/home/${USERNAME}"
-RUN groupadd $USERNAME && \
-    useradd -s /bin/bash --gid ${USERNAME} -m ${USERNAME} && \
-    echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
-    chmod 0440 /etc/sudoers.d/${USERNAME}
+RUN groupadd --gid 1000 ${USERNAME} && useradd -s /bin/bash --gid 1000 -m ${USERNAME}
 
 RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     umask g-w,o-w && \
