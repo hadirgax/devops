@@ -3,6 +3,8 @@ FROM ubuntu:jammy
 LABEL maintainer="hadirgax"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONFAULTHANDLER 1
 
 # hadolint ignore=DL3008
 RUN set -eux; \
@@ -20,8 +22,10 @@ RUN set -eux; \
         netbase \
         openssh-client \
         procps \
+        p7zip-full \
         subversion \
         wget \
+        zip \
         zsh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
