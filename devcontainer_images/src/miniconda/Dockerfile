@@ -48,9 +48,9 @@ RUN python3 -m pip install --upgrade \
     cryptography==42.0.5 \
     pyopenssl==24.1.0
 
-#TODO: add vscode user container
-#ARG USERNAME=vscode
-# RUN groupadd -r conda --gid 900 && usermod -aG conda ${USERNAME}
+ARG USERNAME=vscode
+RUN groupadd $USERNAME && useradd -s /bin/bash --gid $USERNAME -m $USERNAME
+RUN groupadd -r conda --gid 900 && usermod -aG conda ${USERNAME}
 
 RUN chmod =2775 /opt/conda
 
