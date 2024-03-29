@@ -27,6 +27,8 @@ RUN set -eux; \
         wget \
         zip \
         zsh \
+    && apt-get upgrade -yq \
+    && update-ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -34,7 +36,10 @@ ENV PATH /opt/conda/bin:$PATH
 
 ARG USERNAME=devcon
 ARG USER_HOME="/home/${USERNAME}"
-RUN groupadd $USERNAME && useradd -s /bin/bash --gid $USERNAME -m $USERNAME
+RUN groupadd $USERNAME && \
+    useradd -s /bin/bash --gid ${USERNAME} -m ${USERNAME} && \
+    echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
+    chmod 0440 /etc/sudoers.d/${USERNAME}
 
 CMD [ "/bin/bash" ]
 
