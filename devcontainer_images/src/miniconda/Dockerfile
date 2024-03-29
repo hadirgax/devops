@@ -42,11 +42,8 @@ RUN set -x && \
     echo "conda activate base" >> ~/.bashrc && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    /opt/conda/bin/conda update --all && \
     /opt/conda/bin/conda clean -afy
-
-RUN python3 -m pip install --upgrade \
-    cryptography==42.0.5 \
-    pyopenssl==24.1.0
 
 ARG USERNAME=vscode
 RUN groupadd $USERNAME && useradd -s /bin/bash --gid $USERNAME -m $USERNAME
