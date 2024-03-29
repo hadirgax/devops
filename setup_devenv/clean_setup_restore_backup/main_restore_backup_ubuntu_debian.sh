@@ -184,21 +184,23 @@ function configuring_oh_my_zsh() {
 
 
 function install_miniconda() {
-    # echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.bashrc"
-    # echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.zshrc"
-
-    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-    SHA256SUM="b978856ec3c826eb495b60e3fffe621f670c101150ebcbdeede4f961f22dc438"
-
+    echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.bashrc"
+    echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.zshrc"
+    CONDA_VERSION=py311_24.1.2-0
+    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh" && \
+    SHA256SUM="3f2e5498e550a6437f15d9cc8020d52742d0ba70976ee8fce4f0daefa3992d2e" && \
     MINICONDA_TMP_FILE=/tmp/miniconda.sh
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
     echo "${SHA256SUM} ${MINICONDA_TMP_FILE}" > /tmp/shasum && \
-    # sha256sum --check --status /tmp/shasum && \
+    sha256sum --check --status /tmp/shasum && \
     mkdir -p /opt && \
     sudo bash ${MINICONDA_TMP_FILE} -b -p /opt/conda && \
     rm ${MINICONDA_TMP_FILE} /tmp/shasum && \
     sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.zshrc && \
     echo "conda activate base" >> ~/.bashrc && \
+    echo "conda activate base" >> ~/.zshrc && \
     sudo find /opt/conda/ -follow -type f -name '*.a' -delete && \
     sudo find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda update --all && \
