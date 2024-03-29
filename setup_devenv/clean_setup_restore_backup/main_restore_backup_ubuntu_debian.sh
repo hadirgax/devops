@@ -36,7 +36,7 @@ function update_and_install {
 
     echo
     echo ">>>>> Installing Latest Version of GIT... >>>>>"
-    install_latest_git
+    install_git
     echo ">>>>> Testing git installation... >>>>>"
     git --version
 
@@ -88,15 +88,14 @@ function install_packages_and_tools {
 }
 
 
-function install_latest_git {
-    GIT_VERSION_LIST="$(curl -sSL -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/git/git/tags" | grep -oP '"name":\s*"v\K[0-9]+\.[0-9]+\.[0-9]+"' | tr -d '"' | sort -rV )"
-    GIT_VERSION="$(echo "${GIT_VERSION_LIST}" | head -n 1)"
+function install_git {
+    GIT_VERSION="2.44.0"
     echo "Downloading source for ${GIT_VERSION}..."
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
     echo "Building..."
     cd /tmp/git-${GIT_VERSION}
-    sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all \
-        && sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1
+    sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
+    sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1
     sudo rm -rf /tmp/git-${GIT_VERSION}
     sudo rm -rf /var/lib/apt/lists/*
 }
