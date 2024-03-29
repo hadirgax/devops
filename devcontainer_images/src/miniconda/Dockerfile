@@ -11,12 +11,17 @@ RUN set -eux; \
     apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         bzip2 \
+        build-essential \
         ca-certificates \
         curl \
-        git \
+        gettext \
         gnupg \
+        libcurl?-openssl-dev \
+        libexpat1-dev \
         libglib2.0-0 \
+        libpcre2-dev \
         libsm6 \
+        libssl-dev \
         libxext6 \
         libxrender1 \
         netbase \
@@ -24,17 +29,31 @@ RUN set -eux; \
         procps \
         p7zip-full \
         subversion \
+        sudo \
+        tar \
         wget \
         zip \
+        zlib1g-dev \
         zsh \
     && apt-get upgrade -yq \
     && update-ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+ARG GIT_VERSION=2.44.0
+RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
+    cd /tmp/git-${GIT_VERSION} && \
+    make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
+    make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1 && \
+    rm -rf /tmp/git-${GIT_VERSION} && \
+    rm -rf /var/lib/apt/lists/*
+
 ARG USERNAME=devcon
 ARG USER_HOME="/home/${USERNAME}"
-RUN groupadd --gid 1000 ${USERNAME} && useradd -s /bin/bash --gid 1000 -m ${USERNAME}
+RUN groupadd --gid 1000 ${USERNAME} && \
+    useradd -s /bin/bash --gid 1000 -m ${USERNAME} && \
+    echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
+    chmod 0440 /etc/sudoers.d/${USERNAME}
 
 RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     umask g-w,o-w && \
@@ -74,13 +93,3 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda update --all -y && \
     /opt/conda/bin/conda clean -afy
-
-RUN groupadd -r conda --gid 900 && usermod -aG conda ${USERNAME}
-
-RUN chmod =2775 /opt/conda
-
-# Copy environment.yml (if found) to a temp location so we update the environment. Also
-# copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY environment.yml* noop.txt /tmp/conda-tmp/
-RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
-    && rm -rf /tmp/conda-tmp
