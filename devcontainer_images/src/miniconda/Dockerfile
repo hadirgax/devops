@@ -32,8 +32,6 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH /opt/conda/bin:$PATH
-
 ARG USERNAME=devcon
 ARG USER_HOME="/home/${USERNAME}"
 RUN groupadd --gid 1000 ${USERNAME} && useradd -s /bin/bash --gid 1000 -m ${USERNAME}
@@ -56,12 +54,17 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 
 CMD [ "/bin/bash" ]
 
+ENV PATH /opt/conda/bin:$PATH
+ARG CONDA_VERSION=py311_24.1.2-0
 RUN set -x && \
-    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
+    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh" && \
+    SHA256SUM="3f2e5498e550a6437f15d9cc8020d52742d0ba70976ee8fce4f0daefa3992d2e" && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
+    echo "${SHA256SUM} /tmp/miniconda.sh" > /tmp/shasum && \
+    sha256sum --check --status /tmp/shasum && \
     mkdir -p /opt && \
     bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh && \
+    rm /tmp/miniconda.sh /tmp/shasum && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.bashrc && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.zshrc && \
@@ -81,5 +84,3 @@ RUN chmod =2775 /opt/conda
 COPY environment.yml* noop.txt /tmp/conda-tmp/
 RUN if [ -f "/tmp/conda-tmp/environment.yml" ]; then umask 0002 && /opt/conda/bin/conda env update -n base -f /tmp/conda-tmp/environment.yml; fi \
     && rm -rf /tmp/conda-tmp
-
-USER devcon
