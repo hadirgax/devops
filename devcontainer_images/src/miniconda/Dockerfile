@@ -45,7 +45,7 @@ RUN set -x && \
     echo "conda activate base" >> ${USER_HOME}/.bashrc && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda update --all && \
+    /opt/conda/bin/conda update --all -y && \
     /opt/conda/bin/conda clean -afy
 
 RUN groupadd -r conda --gid 900 && usermod -aG conda ${USERNAME}
