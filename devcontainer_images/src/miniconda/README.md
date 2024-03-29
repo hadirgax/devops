@@ -1,4 +1,6 @@
+# Miniconda Devcontainer
 
+The remote user of this devcontainer is `devcon`.
 
 ## References
 

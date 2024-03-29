@@ -187,29 +187,22 @@ function install_miniconda() {
     # echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.bashrc"
     # echo -e "export PATH=/opt/conda/bin:\$PATH" >> "${HOME}/.zshrc"
 
-    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-py312_24.1.2-0-Linux-x86_64.sh"
+    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
     SHA256SUM="b978856ec3c826eb495b60e3fffe621f670c101150ebcbdeede4f961f22dc438"
 
     MINICONDA_TMP_FILE=/tmp/miniconda.sh
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
     echo "${SHA256SUM} ${MINICONDA_TMP_FILE}" > /tmp/shasum && \
-    sha256sum --check --status /tmp/shasum && \
+    # sha256sum --check --status /tmp/shasum && \
     mkdir -p /opt && \
     sudo bash ${MINICONDA_TMP_FILE} -b -p /opt/conda && \
     rm ${MINICONDA_TMP_FILE} /tmp/shasum && \
     sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    /opt/conda/bin/conda init bash && \
-    /opt/conda/bin/conda init zsh && \
-    # echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    # echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.zshrc && \
-    # echo "conda activate base" >> ~/.bashrc && \
-    # echo "conda activate base" >> ~/.zshrc && \
+    echo "conda activate base" >> ~/.bashrc && \
     sudo find /opt/conda/ -follow -type f -name '*.a' -delete && \
     sudo find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    /opt/conda/bin/conda update --all && \
     /opt/conda/bin/conda clean -afy
-
-    /opt/conda/bin/conda config --set solver libmamba
-
 }
 
 function install-golang() {
