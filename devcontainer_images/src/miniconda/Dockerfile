@@ -27,6 +27,8 @@ RUN set -eux; \
         wget \
         zip \
         zsh \
+    && apt-get upgrade -yq \
+    && update-ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -34,7 +36,23 @@ ENV PATH /opt/conda/bin:$PATH
 
 ARG USERNAME=devcon
 ARG USER_HOME="/home/${USERNAME}"
-RUN groupadd $USERNAME && useradd -s /bin/bash --gid $USERNAME -m $USERNAME
+RUN groupadd --gid 1000 ${USERNAME} && useradd -s /bin/bash --gid 1000 -m ${USERNAME}
+
+RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
+    umask g-w,o-w && \
+    mkdir -p "${OMZ_DIR}" && \
+    git clone --depth=1 \
+        -c core.eol=lf \
+        -c core.autocrlf=false \
+        -c fsck.zeroPaddedFilemode=ignore \
+        -c fetch.fsck.zeroPaddedFilemode=ignore \
+        -c receive.fsck.zeroPaddedFilemode=ignore \
+        "https://github.com/ohmyzsh/ohmyzsh" "${OMZ_DIR}" 2>&1 && \
+    ZSHRC_TEMPLATE_FILE="${OMZ_DIR}/templates/zshrc.zsh-template" && \
+    echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${USER_HOME}/.zshrc && \
+    cd ${OMZ_DIR} && \
+    git repack -a -d -f --depth=1 --window=1 && \
+    echo "zsh" >> ${USER_HOME}/.bashrc
 
 CMD [ "/bin/bash" ]
 
@@ -46,7 +64,9 @@ RUN set -x && \
     rm /tmp/miniconda.sh && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.bashrc && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.zshrc && \
     echo "conda activate base" >> ${USER_HOME}/.bashrc && \
+    echo "conda activate base" >> ${USER_HOME}/.zshrc && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda update --all -y && \
@@ -55,23 +75,6 @@ RUN set -x && \
 RUN groupadd -r conda --gid 900 && usermod -aG conda ${USERNAME}
 
 RUN chmod =2775 /opt/conda
-
-RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
-    ZSHRC_TEMPLATE_FILE="${OMZ_DIR}/templates/zshrc.zsh-template" && \
-    ZSHRC_PATH=${USER_HOME}/.zshrc && \
-    umask g-w,o-w && \
-    mkdir -p "${OMZ_DIR}" && \
-    git clone --depth=1 \
-        -c core.eol=lf \
-        -c core.autocrlf=false \
-        -c fsck.zeroPaddedFilemode=ignore \
-        -c fetch.fsck.zeroPaddedFilemode=ignore \
-        -c receive.fsck.zeroPaddedFilemode=ignore \
-        "https://github.com/ohmyzsh/ohmyzsh" "${OMZ_DIR}" 2>&1 && \
-    echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${ZSHRC_PATH} && \
-    cd ${OMZ_DIR} && \
-    git repack -a -d -f --depth=1 --window=1 && \
-    echo "zsh" >> ${USER_HOME}/.bashrc
 
 # Copy environment.yml (if found) to a temp location so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
