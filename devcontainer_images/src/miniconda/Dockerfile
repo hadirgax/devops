@@ -49,9 +49,10 @@ RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xz
     rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=devcon
+ARG USER_GID=1000
 ARG USER_HOME="/home/${USERNAME}"
-RUN groupadd --gid 1000 ${USERNAME} && \
-    useradd -s /bin/bash --gid 1000 -m ${USERNAME} && \
+RUN groupadd --gid ${USER_GID} ${USERNAME} && \
+    useradd -s /bin/bash --gid ${USER_GID} -m ${USERNAME} && \
     echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
     chmod 0440 /etc/sudoers.d/${USERNAME}
 
@@ -69,7 +70,9 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${USER_HOME}/.zshrc && \
     cd ${OMZ_DIR} && \
     git repack -a -d -f --depth=1 --window=1 && \
-    echo "zsh" >> ${USER_HOME}/.bashrc
+    echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh && \
+    chsh --shell /bin/zsh ${USERNAME} && \
+    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc
 
 CMD [ "/bin/bash" ]
 
@@ -92,4 +95,5 @@ RUN set -x && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda update --all -y && \
-    /opt/conda/bin/conda clean -afy
+    /opt/conda/bin/conda clean -afy && \
+    chown -R ${USER_GID}:${USERNAME} /opt/conda
