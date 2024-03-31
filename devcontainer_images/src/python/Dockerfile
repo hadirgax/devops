@@ -73,11 +73,3 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh && \
     chsh --shell /bin/zsh ${USERNAME} && \
     chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc
-
-CMD [ "/bin/bash" ]
-
-ARG VENV_PATH="${USER_HOME}/venv"
-RUN su devcon -c "python -m venv ${VENV_PATH}" && \
-    su devcon -c "${VENV_PATH}/bin/pip --no-cache-dir install --upgrade uv" && \
-    su devcon -c "echo . ${VENV_PATH}/bin/activate >> ${USER_HOME}/.bashrc" && \
-    su devcon -c "echo . ${VENV_PATH}/bin/activate >> ${USER_HOME}/.zshrc"
