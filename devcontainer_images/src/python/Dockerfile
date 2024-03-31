@@ -76,8 +76,8 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 
 CMD [ "/bin/bash" ]
 
-ARG VENV_PATH="/home/devcon/venv"
-RUN su devcon -c "python -m venv ${VENV_PATH}" \
-    && su devcon -c "${VENV_PATH}/bin/pip --disable-pip-version-check --no-cache-dir install --upgrade \
-        setuptools~=69.0.3 \
-        gitpython~=3.1.41
+ARG VENV_PATH="${USER_HOME}/venv"
+RUN su devcon -c "python -m venv ${VENV_PATH}" && \
+    su devcon -c "${VENV_PATH}/bin/pip --no-cache-dir install --upgrade uv" && \
+    su devcon -c "echo . ${VENV_PATH}/bin/activate >> ${USER_HOME}/.bashrc" && \
+    su devcon -c "echo . ${VENV_PATH}/bin/activate >> ${USER_HOME}/.zshrc"
