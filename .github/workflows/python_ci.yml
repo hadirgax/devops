@@ -1,15 +1,15 @@
-name: Build Miniconda Ubuntu Jammy Devcontainer Image
+name: Build Python Bookworm Devcontainer Image
 on:
   push:
     branches:
       - main
     paths:
-      - 'devcontainer_images/src/miniconda/Dockerfile'
-      - '.github/workflows/miniconda_ci.yml'
+      - 'devcontainer_images/src/python/Dockerfile'
+      - '.github/workflows/python_ci.yml'
   pull_request:
     paths:
-      - 'devcontainer_images/src/miniconda/Dockerfile'
-      - '.github/workflows/miniconda_ci.yml'
+      - 'devcontainer_images/src/python/Dockerfile'
+      - '.github/workflows/python_ci.yml'
   workflow_dispatch:
 
 jobs:
@@ -41,16 +41,16 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.5.1
         with:
-          images: hadirgax/devcontainer-miniconda
+          images: hadirgax/devcontainer-python
           tags: |
             type=ref,event=branch
 
-      - name: build miniconda
+      - name: build python
         uses: docker/build-push-action@v5.3.0
         with:
-          context: ./devcontainer_images/src/miniconda
+          context: ./devcontainer_images/src/python
           builder: ${{ steps.buildx.outputs.name }}
-          file: ./devcontainer_images/src/miniconda/Dockerfile
+          file: ./devcontainer_images/src/python/Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
