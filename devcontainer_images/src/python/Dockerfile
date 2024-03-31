@@ -1,6 +1,5 @@
-FROM ubuntu:jammy
-
-LABEL maintainer="hadirgax"
+# [Choice] Python version from https://hub.docker.com/_/python
+FROM python:3.12-slim-bookworm
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -77,26 +76,8 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 
 CMD [ "/bin/bash" ]
 
-ENV PATH /opt/conda/bin:$PATH
-ARG CONDA_VERSION=py311_24.1.2-0
-ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="3f2e5498e550a6437f15d9cc8020d52742d0ba70976ee8fce4f0daefa3992d2e"
-
-RUN set -x && \
-    wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
-    echo "${SHA256SUM} /tmp/miniconda.sh" > /tmp/shasum && \
-    sha256sum --check --status /tmp/shasum && \
-    mkdir -p /opt && \
-    bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh /tmp/shasum && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.bashrc && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.zshrc && \
-    echo "conda activate base" >> ${USER_HOME}/.bashrc && \
-    echo "conda activate base" >> ${USER_HOME}/.zshrc && \
-    find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda update --all -y && \
-    /opt/conda/bin/conda clean -afy && \
-    chown -R ${USER_GID}:${USERNAME} /opt/conda && \
-    chmod 0775 /opt/conda
+ARG VENV_PATH="/home/devcon/venv"
+RUN su devcon -c "python -m venv ${VENV_PATH}" \
+    && su devcon -c "${VENV_PATH}/bin/pip --disable-pip-version-check --no-cache-dir install --upgrade \
+        setuptools~=69.0.3 \
+        gitpython~=3.1.41
