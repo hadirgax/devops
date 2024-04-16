@@ -16,6 +16,7 @@ RUN set -eux; \
         curl \
         gettext \
         gnupg \
+        htop \
         libcurl?-openssl-dev \
         libexpat1-dev \
         libfontconfig1 \
@@ -78,9 +79,9 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 CMD [ "/bin/bash" ]
 
 ENV PATH /opt/conda/bin:$PATH
-ARG CONDA_VERSION=py311_24.1.2-0
+ARG CONDA_VERSION=py311_24.3.0-0
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="3f2e5498e550a6437f15d9cc8020d52742d0ba70976ee8fce4f0daefa3992d2e"
+ARG SHA256SUM="4da8dde69eca0d9bc31420349a204851bfa2a1c87aeb87fe0c05517797edaac4"
 
 RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
