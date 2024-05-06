@@ -46,7 +46,25 @@ sudo find /opt/conda/ -follow -type f -name '*.a' -delete && \
 sudo find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
 /opt/conda/bin/conda update --all && \
 /opt/conda/bin/conda clean -afy
-conda init bash
+/opt/conda/bin/conda init bash
+
+
+# install homebrew
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
+
+# install vscode
+sudo apt-get install wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+rm -f packages.microsoft.gpg
+sudo apt install apt-transport-https
+sudo apt update
+sudo apt install code
 
 # install zsh
 cd ${HOME}
@@ -69,21 +87,3 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${oh_my_install_dir}/
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${oh_my_install_dir}/custom/plugins/zsh-syntax-highlighting
 echo 'zsh' >> ~/.bashrc
 conda init zsh
-
-# install homebrew
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
-
-
-# install vscode
-sudo apt-get install wget gpg
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
-rm -f packages.microsoft.gpg
-sudo apt install apt-transport-https
-sudo apt update
-sudo apt install code
