@@ -29,6 +29,7 @@ winget install --id Zoom.Zoom
 
 #>>> Optional and interesting stuff
 # winget install --id GIMP.GIMP
+# winget install --id HandBrake.HandBrake
 # winget install --id Inkscape.Inkscape
 # winget install --id Insomnia.Insomnia
 # winget install --id KDE.Kdenlive
