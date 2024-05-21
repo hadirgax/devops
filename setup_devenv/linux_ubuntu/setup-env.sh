@@ -41,12 +41,15 @@ MINICONDA_TMP_FILE=/tmp/miniconda.sh
 wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
 mkdir -p /opt && \
 sudo bash ${MINICONDA_TMP_FILE} -b -p /opt/conda && \
+sudo chown -R $(echo $USER) /opt/conda && \
+eval "$(/opt/conda/bin/conda shell.bash hook)" && \
 sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
 sudo find /opt/conda/ -follow -type f -name '*.a' -delete && \
 sudo find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-/opt/conda/bin/conda update --all && \
-/opt/conda/bin/conda clean -afy
-/opt/conda/bin/conda init bash
+conda update --all && \
+conda clean -afy && \
+conda init bash && \
+conda init zsh
 
 
 # install homebrew
