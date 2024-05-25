@@ -42,7 +42,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.44.0
+ARG GIT_VERSION=2.45.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
@@ -69,19 +69,23 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
         -c receive.fsck.zeroPaddedFilemode=ignore \
         "https://github.com/ohmyzsh/ohmyzsh" "${OMZ_DIR}" 2>&1 && \
     ZSHRC_TEMPLATE_FILE="${OMZ_DIR}/templates/zshrc.zsh-template" && \
-    echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${USER_HOME}/.zshrc && \
+    ZSHRC_USER_FILE="${USER_HOME}/.zshrc" && \
+    echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${ZSHRC_USER_FILE} && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${OMZ_DIR}/custom/plugins/zsh-autosuggestions && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OMZ_DIR}/custom/plugins/zsh-syntax-highlighting && \
     cd ${OMZ_DIR} && \
     git repack -a -d -f --depth=1 --window=1 && \
     echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh && \
     chsh --shell /bin/zsh ${USERNAME} && \
-    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc
+    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc && \
+    echo 'zsh' >> ${USER_HOME}/.bashrc
 
 CMD [ "/bin/bash" ]
 
 ENV PATH /opt/conda/bin:$PATH
-ARG CONDA_VERSION=py311_24.3.0-0
+ARG CONDA_VERSION=py312_24.4.0-0
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="4da8dde69eca0d9bc31420349a204851bfa2a1c87aeb87fe0c05517797edaac4"
+ARG SHA256SUM="b6597785e6b071f1ca69cf7be6d0161015b96340b9a9e132215d5713408c3a7c"
 
 RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
@@ -90,14 +94,13 @@ RUN set -x && \
     mkdir -p /opt && \
     bash /tmp/miniconda.sh -b -p /opt/conda && \
     rm /tmp/miniconda.sh /tmp/shasum && \
+    chown -R ${USER_GID}:${USERNAME} /opt/conda && \
+    eval "$(/opt/conda/bin/conda shell.bash hook)" && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.bashrc && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ${USER_HOME}/.zshrc && \
-    echo "conda activate base" >> ${USER_HOME}/.bashrc && \
-    echo "conda activate base" >> ${USER_HOME}/.zshrc && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda update --all -y && \
-    /opt/conda/bin/conda clean -afy && \
-    chown -R ${USER_GID}:${USERNAME} /opt/conda && \
-    chmod 0775 /opt/conda
+    conda update --all -y && \
+    conda clean -afy && \
+    chmod 0775 /opt/conda && \
+    conda init bash && \
+    conda init zsh
