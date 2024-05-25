@@ -36,25 +36,29 @@ sudo rm -rf /var/lib/apt/lists/*
 git config --global credential.helper store
 
 # Install zsh
-cd ${HOME}
-oh_my_install_dir="${HOME}/.oh-my-zsh"
-echo ">>>>> Inside if statement oh-my-zsh configuration... >>>>>"
-template_path="${oh_my_install_dir}/templates/zshrc.zsh-template"
-user_rc_file="${HOME}/.zshrc"
-umask g-w,o-w
-mkdir -p ${oh_my_install_dir}
+cd ${HOME} && \
+OMZ_DIR="${HOME}/.oh-my-zsh" && \
+echo ">>>>> Inside if statement oh-my-zsh configuration... >>>>>" && \
+umask g-w,o-w && \
+mkdir -p ${OMZ_DIR} && \
 git clone --depth=1 \
     -c core.eol=lf \
     -c core.autocrlf=false \
     -c fsck.zeroPaddedFilemode=ignore \
     -c fetch.fsck.zeroPaddedFilemode=ignore \
     -c receive.fsck.zeroPaddedFilemode=ignore \
-    "https://github.com/ohmyzsh/ohmyzsh" "${oh_my_install_dir}" 2>&1
-# disable autoupdates options
-echo -e "$(cat "${template_path}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${user_rc_file}
-git clone https://github.com/zsh-users/zsh-autosuggestions ${oh_my_install_dir}/custom/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${oh_my_install_dir}/custom/plugins/zsh-syntax-highlighting
-echo 'zsh' >> ~/.bashrc
+    "https://github.com/ohmyzsh/ohmyzsh" "${OMZ_DIR}" 2>&1 && \
+ZSHRC_TEMPLATE_FILE="${OMZ_DIR}/templates/zshrc.zsh-template" && \
+ZSHRC_USER_FILE="${HOME}/.zshrc" && \
+echo -e "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${ZSHRC_USER_FILE} && \
+git clone https://github.com/zsh-users/zsh-autosuggestions ${OMZ_DIR}/custom/plugins/zsh-autosuggestions && \
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OMZ_DIR}/custom/plugins/zsh-syntax-highlighting && \
+cd ${OMZ_DIR} && \
+git repack -a -d -f --depth=1 --window=1 && \
+echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh && \
+chsh --shell /bin/zsh ${USER} && \
+chown -R ${UID}:${USER} ${ZSHRC_USER_FILE} && \
+echo 'zsh' >> ${HOME}/.bashrc
 
 # Install JetBrains Mono font
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
