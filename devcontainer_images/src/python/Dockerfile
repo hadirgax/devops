@@ -41,7 +41,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.44.0
+ARG GIT_VERSION=2.45.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
@@ -68,9 +68,13 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
         -c receive.fsck.zeroPaddedFilemode=ignore \
         "https://github.com/ohmyzsh/ohmyzsh" "${OMZ_DIR}" 2>&1 && \
     ZSHRC_TEMPLATE_FILE="${OMZ_DIR}/templates/zshrc.zsh-template" && \
-    echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${USER_HOME}/.zshrc && \
+    ZSHRC_USER_FILE="${USER_HOME}/.zshrc" && \
+    echo "$(cat "${ZSHRC_TEMPLATE_FILE}")\nDISABLE_AUTO_UPDATE=false\nDISABLE_UPDATE_PROMPT=false" > ${ZSHRC_USER_FILE} && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${OMZ_DIR}/custom/plugins/zsh-autosuggestions && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OMZ_DIR}/custom/plugins/zsh-syntax-highlighting && \
     cd ${OMZ_DIR} && \
     git repack -a -d -f --depth=1 --window=1 && \
     echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh && \
     chsh --shell /bin/zsh ${USERNAME} && \
-    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc
+    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc && \
+    echo 'zsh' >> ${USER_HOME}/.bashrc
