@@ -26,6 +26,8 @@ winget install --id Stoplight.Studio
 winget install --id Tarma.PublishOrPerish
 winget install --id TrackerSoftware.PDF-XChangeEditor
 winget install --id Zoom.Zoom
+winget install -e --id Microsoft.AzureCLI
+winget install -e --id Microsoft.Azd
 
 #>>> Optional and interesting stuff
 # winget install --id GIMP.GIMP
