@@ -1,7 +1,6 @@
 
 # install binaries
-sudo apt-get install   git
- sudo apt-get update -yq && export DEBIAN_FRONTEND=noninteractive \
+sudo apt-get update -yq && export DEBIAN_FRONTEND=noninteractive \
     && sudo apt-get install -q -y --no-install-recommends \
         apt-transport-https \
         build-essential \
@@ -65,7 +64,7 @@ echo 'zsh' >> ${HOME}/.bashrc
 
 # install miniconda
 MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
-MINICONDA_TMP_FILE=/tmp/miniconda.sh
+MINICONDA_TMP_FILE=/tmp/miniconda.sh && \
 wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
 mkdir -p /opt && \
 sudo bash ${MINICONDA_TMP_FILE} -b -p /opt/conda && \
