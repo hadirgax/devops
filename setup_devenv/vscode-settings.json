@@ -1,0 +1,268 @@
+{
+  "cSpell.language": "en,pt,es",
+  "cSpell.enableFiletypes": [
+    "!asciidoc",
+    "!c",
+    "!cpp",
+    "!csharp",
+    "!go",
+    "!handlebars",
+    "!haskell",
+    "!jade",
+    "!java",
+    "!latex",
+    "!php",
+    "!pug",
+    "!python",
+    "!restructuredtext",
+    "!rust",
+    "!scala",
+    "!scss"
+  ],
+  "cSpell.userWords": [
+    "chakra",
+    "Keycloak",
+    "middlewares",
+    "persistor",
+    "prefetch",
+    "rocketseat"
+  ],
+
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.columnSelection": false,
+  "editor.defaultFormatter": null,
+  "editor.fontFamily": "'JetBrains Mono',Consolas,'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": false,
+  "editor.lineHeight": 21,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.cursorStyle": "block-outline",
+  "editor.cursorBlinking": "smooth",
+  "editor.parameterHints.enabled": false,
+  "editor.semanticHighlighting.enabled": false,
+  "editor.suggestSelection": "first",
+  "editor.renderLineHighlight": "gutter",
+  "editor.rulers": [99],
+  "editor.tabSize": 4,
+
+  "emmet.includeLanguages": { "javascript": "javascriptreact" },
+  "emmet.showSuggestionsAsSnippets": true,
+  "emmet.syntaxProfiles": { "javascript": "jsx" },
+
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.compactFolders": false,
+
+  "extensions.autoUpdate": false,
+  "extensions.ignoreRecommendations": true,
+
+  "files.associations": {
+    ".sequelizerc": "javascript",
+    ".stylelintrc": "json",
+    ".prettierrc": "json",
+    "*.tsx": "typescriptreact"
+  },
+
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true
+    // "**/node_modules": true
+  },
+
+  "html.format.indentHandlebars": true,
+  "html.format.indentInnerHtml": true,
+  "html.format.wrapAttributesIndentSize": 2,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.suggest.autoImports": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+
+  "[dockercompose]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.tabSize": 2
+  },
+
+  "[cmake]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.tabSize": 2
+  },
+
+  "[groovy]": {
+    "editor.rulers": [140]
+  },
+
+  "gitlens.gitCommands.skipConfirmations": [
+    "fetch:command",
+    "stash-push:command",
+    "switch:command",
+    "branch-create:command"
+  ],
+  "git.ignoreMissingGitWarning": true,
+  "notebook.cellToolbarLocation": {
+    "default": "right",
+    "jupyter-notebook": "left"
+  },
+
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.blackArgs": ["--line-length", "99"],
+  "python.languageServer": "Pylance",
+  
+  "cmake.configureOnOpen": true,
+  "redhat.telemetry.enabled": false,
+  "security.workspace.trust.untrustedFiles": "open",
+
+  "terminal.integrated.fontSize": 11,
+  "files.eol": "\n",
+  "terminal.integrated.cursorStyle": "block",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.showExitAlert": false,
+  "terminal.integrated.inheritEnv": true,
+  "terminal.integrated.scrollback": 10000,
+
+  "typescript.tsserver.log": "off",
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "typescript.suggest.autoImports": true,
+
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "workbench.startupEditor": "newUntitledFile",
+  "workbench.editor.labelFormat": "short",
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook"
+  },
+  "liveshare.presence": true,
+  "jupyter.askForKernelRestart": false,
+  "[vue]": {
+    "editor.defaultFormatter": "octref.vetur"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "prettier.singleQuote": false,
+  "editor.renderWhitespace": "all",
+  "telemetry.telemetryLevel": "off",
+  "workbench.iconTheme": "bearded-icons",
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "MinGW64": {
+      "path": [
+        "C:\\msys64\\usr\\bin\\bash.exe"
+      ],
+      "args": ["--login", "-i"],
+      "env": { 
+        "MSYSTEM": "MINGW64", 
+        "CHERE_INVOKING":"1"
+      }
+    },
+    "Windows PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "PowerShell": {
+      "source": "Windows.Terminal.PowershellCore",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "Git Bash": {
+      "source": "Git Bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "zsh"
+    }
+  },
+  "notebook.output.textLineLimit": 200,
+  "editor.fontSize": 13,
+  "editor.minimap.maxColumn": 100,
+  "editor.minimap.autohide": true,
+  "notebook.lineNumbers": "on",
+  "debug.console.fontSize": 12,
+  "remote.SSH.remotePlatform": {
+    "debian-vbox": "linux",
+    "localhost": "linux"
+  },
+  "workbench.colorTheme": "Bearded Theme Arc EolStorm",
+  "notebook.output.lineHeight": 20,
+  "notebook.output.fontSize": 12,
+  "workbench.panel.defaultLocation": "bottom",
+  "workbench.panel.opensMaximized": "never",
+  "task.problemMatchers.neverPrompt": {
+    "shell": true
+  },
+  "window.commandCenter": false,
+  "remote.autoForwardPortsSource": "hybrid",
+  "git.autofetch": true,
+  "cmake.options.statusBarVisibility": "visible",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "git.confirmSync": false,
+  "github.copilot.enable": {
+    "quarto": false,
+    "*": true
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  "cmake.pinnedCommands": [
+    "workbench.action.tasks.configureTaskRunner",
+    "workbench.action.tasks.runTask"
+  ],
+  "cmake.showOptionsMovedNotification": false
+}
