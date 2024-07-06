@@ -18,6 +18,7 @@ winget install --id Microsoft.Teams
 winget install --id Microsoft.VCRedist.2015+.x64
 winget install --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"'
 winget install --id Microsoft.WindowsTerminal
+winget install --id Mobatek.MobaXterm
 winget install --id Mozilla.Firefox
 winget install --id Notepad++.Notepad++
 winget install --id SMPlayer.SMPlayer
