@@ -70,6 +70,7 @@ function install_packages_and_tools {
         libssl-dev \
         openssh-client \
         procps \
+        unzip \
         zlib1g-dev \
         zsh \
     && sudo apt-get upgrade -yq
