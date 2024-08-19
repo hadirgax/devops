@@ -8,7 +8,7 @@ $OPT_DIR="C:\opt"
 Invoke-WebRequest -URI $DOUBLECMD_URL -OutFile $DOUBLECMD_ZIP
 & "${env:ProgramFiles}\7-Zip\7z.exe" x $DOUBLECMD_ZIP "-o$($OPT_DIR)" -aoa -r
 rm -Force $DOUBLECMD_ZIP
-cp -Force .\setup-devenv\doublecmd\* "${OPT_DIR}\doublecmd\"
+cp -Force .\setup_devenv\doublecmd\* "${OPT_DIR}\doublecmd\"
 
 $WshShell = New-Object -ComObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut("$env:APPDATA\Microsoft\Windows\Start Menu\Programs\doublecmd.lnk")
