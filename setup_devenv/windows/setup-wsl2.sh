@@ -70,6 +70,7 @@ function install_packages_and_tools {
         libssl-dev \
         openssh-client \
         procps \
+        unzip \
         zlib1g-dev \
         zsh \
     && sudo apt-get upgrade -yq
@@ -83,14 +84,17 @@ function install_packages_and_tools {
 
 function install_git {
     GIT_VERSION="2.45.0" && \
-    echo "Downloading source for ${GIT_VERSION}..." && \
+    echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
-    echo "Building..."
+    echo;echo "Building..."
     cd /tmp/git-${GIT_VERSION} && \
     sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
     sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1
     sudo rm -rf /tmp/git-${GIT_VERSION} && \
     sudo rm -rf /var/lib/apt/lists/*
+    git --version
+    # This configuration ensures that line endings in Git repositories are normalized to LF (Unix-style) endings,
+    git config --global core.autocrlf input
 }
 
 
