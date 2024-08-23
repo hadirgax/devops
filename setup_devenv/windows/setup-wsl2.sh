@@ -3,9 +3,8 @@
 set -e  # exit on error
 set -x  # debug trace mode
 
-DISTRO="${DISTRO}"
-FEATURE_DIR="${FEATURE_DIR}"
-BACKUP_FILE="${BACKUP_FILE}"
+FEATURE_DIR=${FEATURE_DIR}
+BACKUP_FILE=${BACKUP_FILE}
 
 function main {
     # if wsl need to chenge nameserver in file /etc/resolv.conf then uncomment this:
@@ -83,7 +82,7 @@ function install_packages_and_tools {
 
 
 function install_git {
-    GIT_VERSION="2.45.0" && \
+    GIT_VERSION="2.46.0" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
     echo;echo "Building..."

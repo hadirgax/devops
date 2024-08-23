@@ -1,8 +1,8 @@
 # Write-Output "`n>>>>> Installing $WSL_DISTRO Distribution... >>>>>"
 $WSL_DISTRO="Ubuntu" # opts: Debian/Ubuntu
-# wsl.exe --unregister $WSL_DISTRO
-# wsl.exe --install -d $WSL_DISTRO
-# wsl.exe -s $WSL_DISTRO
+wsl.exe --unregister $WSL_DISTRO
+wsl.exe --install -d $WSL_DISTRO
+wsl.exe -s $WSL_DISTRO
 
 # VARIABLES
 $DEVOPS_DIR="${env:UserProfile}\workspace\devops"
@@ -24,10 +24,9 @@ $SETUP_WSL_PATH = $SETUP_WIN_PATH -replace '\\', '/' -replace 'C:', '/mnt/c'
 $SETUP_WSL_PATH
 
 # Write-Output "`n>>> Configuring a new WSL setup..."
-wsl.exe -d $WSL_DISTRO -e bash -c "sudo chmod +x $SETUP_WSL_PATH && \
-    DISTRO=$WSL_DISTRO \
-    FEATURE_DIR=$FEATURE_WSL_DIR \
-    $SETUP_WSL_PATH main"
+# wsl.exe -d $WSL_DISTRO -e bash -c "sed -i -e 's/\r$//' $SETUP_WSL_PATH"
+wsl.exe -d $WSL_DISTRO -e bash -c "sudo chmod +x $SETUP_WSL_PATH"
+wsl.exe -d $WSL_DISTRO -e bash -c "FEATURE_DIR=$FEATURE_WSL_DIR $SETUP_WSL_PATH main"
     # BACKUP_FILE=$BACKUP_FILE \
 
 Write-Output "`n>>>>> Done! >>>>>"
