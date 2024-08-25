@@ -3,9 +3,6 @@
 set -e  # exit on error
 set -x  # debug trace mode
 
-FEATURE_DIR=${FEATURE_DIR}
-BACKUP_FILE=${BACKUP_FILE}
-
 function main {
     # if wsl need to chenge nameserver in file /etc/resolv.conf then uncomment this:
     # set_nameserver
@@ -29,7 +26,6 @@ function update_and_install {
     echo;echo ">>>>> Installing Latest Version of GIT... >>>>>"
     install_git
     echo ">>>>> Testing git installation... >>>>>"
-    git --version
 
     echo;echo ">>>>> Configuring oh-my-zsh repository... >>>>>"
     configuring_oh_my_zsh
@@ -93,16 +89,16 @@ function install_git {
     sudo rm -rf /var/lib/apt/lists/*
     git --version
     # This configuration ensures that line endings in Git repositories are normalized to LF (Unix-style) endings,
-    git config --global core.autocrlf input
+    # git config --global core.autocrlf input
 }
 
 
 function configuring_oh_my_zsh() {
     # Adapted, simplified inline Oh My Zsh! install steps that adds, defaults to a codespaces theme.
     # See https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh for official script.
+    echo ">>>>> Inside if statement oh-my-zsh configuration... >>>>>" && \
     cd ${HOME} && \
     OMZ_DIR="${HOME}/.oh-my-zsh" && \
-    echo ">>>>> Inside if statement oh-my-zsh configuration... >>>>>" && \
     umask g-w,o-w && \
     mkdir -p ${OMZ_DIR} && \
     git clone --depth=1 \

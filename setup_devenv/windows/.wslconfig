@@ -2,14 +2,15 @@
 
 memory=6GB
 
-processors=2
+processors=4
 
 swap=2GB
 
+# Boolean to turn on or off nested virtualization, enabling other nested VMs to run inside WSL 2. Only available for Windows 11.
 nestedVirtualization=false
 
 # Disable page reporting so WSL retains all allocated memory claimed from Windows and releases none back when free
-pageReporting=false
+# pageReporting=true
 
 # Turn off default connection to bind WSL 2 localhost to Windows localhost
 # Boolean specifying if ports bound to wildcard or localhost in the WSL 2 VM should be connectable from the host via localhost:port.
