@@ -1,5 +1,6 @@
 # >>> Default tools
 winget install --id 7zip.7Zip
+winget install --id Anaconda.Miniconda3
 winget install --id Brave.Brave
 winget install --id calibre.calibre
 winget install --id dbeaver.dbeaver
