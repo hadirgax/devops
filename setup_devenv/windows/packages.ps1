@@ -53,4 +53,4 @@ winget install -e --id Microsoft.Azd
 # miniconda: https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe
 # vcredistributable: https://aka.ms/vs/17/release/vc_redist.x64.exe
 # virtualbox: https://download.virtualbox.org/virtualbox/LATEST.TXT
-# wacomDrivers: https://cdn.wacom.com/u/productsupport/drivers/win/professional/WacomTablet_6.4.5-5.exe
+# wacomDrivers: https://www.wacom.com/pt-br/support/product-support/drivers#

@@ -78,7 +78,7 @@ function install_packages_and_tools {
 
 
 function install_git {
-    GIT_VERSION="2.46.0" && \
+    GIT_VERSION="2.47.1" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
     echo;echo "Building..."
@@ -151,13 +151,12 @@ function install_miniconda() {
     MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
     MINICONDA_TMP_FILE=/tmp/miniconda.sh && \
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
-    mkdir -p /opt && \
-    sudo bash ${MINICONDA_TMP_FILE} -b -p /opt/conda && \
-    sudo chown -R $(echo $USER) /opt/conda && \
-    eval "$(/opt/conda/bin/conda shell.bash hook)" && \
-    sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    sudo find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    sudo find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    sudo bash ${MINICONDA_TMP_FILE} -b -p $HOME/conda && \
+    sudo chown -R $(echo $USER) $HOME/conda && \
+    eval "$($HOME/conda/bin/conda shell.bash hook)" && \
+    sudo ln -s $HOME/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    sudo find $HOME/conda/ -follow -type f -name '*.a' -delete && \
+    sudo find $HOME/conda/ -follow -type f -name '*.js.map' -delete && \
     conda update --all && \
     conda clean -afy && \
     conda init bash && \
