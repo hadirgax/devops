@@ -63,6 +63,7 @@ function install_packages_and_tools {
         libexpat1-dev \
         libpcre2-dev \
         libssl-dev \
+        net-tools \
         openssh-client \
         procps \
         unzip \
@@ -168,6 +169,13 @@ function install-golang() {
     rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
     go version
+}
+
+
+function install-gcloud() {
+    curl https://sdk.cloud.google.com > /tmp/install-gcloud.sh
+    bash /tmp/install-gcloud.sh --disable_prompts
+    exec -l $SHELL
 }
 
 $*
