@@ -159,7 +159,7 @@ function install_miniconda() {
     sudo ln -s $HOME/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     sudo find $HOME/conda/ -follow -type f -name '*.a' -delete && \
     sudo find $HOME/conda/ -follow -type f -name '*.js.map' -delete && \
-    conda update --all && \
+    conda update --all -y && \
     conda clean -afy && \
     conda init bash && \
     conda init zsh
