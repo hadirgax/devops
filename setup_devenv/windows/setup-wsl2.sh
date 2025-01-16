@@ -56,6 +56,7 @@ function install_packages_and_tools {
         cmake \
         dirmngr \
         file \
+        htop \
         gcc \
         gettext \
         gnupg2 \
@@ -79,7 +80,7 @@ function install_packages_and_tools {
 
 
 function install_git {
-    GIT_VERSION="2.47.1" && \
+    GIT_VERSION="2.48.1" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
     echo;echo "Building..."
@@ -175,6 +176,11 @@ function install-golang() {
 function install-gcloud() {
     curl https://sdk.cloud.google.com > /tmp/install-gcloud.sh
     bash /tmp/install-gcloud.sh --disable_prompts
+    exec -l $SHELL
+}
+
+function install-firebase() {
+    curl https://firebase.tools | bash
     exec -l $SHELL
 }
 
