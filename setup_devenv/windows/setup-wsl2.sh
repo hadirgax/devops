@@ -56,6 +56,7 @@ function install_packages_and_tools {
         cmake \
         dirmngr \
         file \
+        htop \
         gcc \
         gettext \
         gnupg2 \
@@ -63,6 +64,7 @@ function install_packages_and_tools {
         libexpat1-dev \
         libpcre2-dev \
         libssl-dev \
+        net-tools \
         openssh-client \
         procps \
         unzip \
@@ -78,7 +80,7 @@ function install_packages_and_tools {
 
 
 function install_git {
-    GIT_VERSION="2.47.1" && \
+    GIT_VERSION="2.48.1" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
     echo;echo "Building..."
@@ -168,6 +170,18 @@ function install-golang() {
     rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
     go version
+}
+
+
+function install-gcloud() {
+    curl https://sdk.cloud.google.com > /tmp/install-gcloud.sh
+    bash /tmp/install-gcloud.sh --disable_prompts
+    exec -l $SHELL
+}
+
+function install-firebase() {
+    curl https://firebase.tools | bash
+    exec -l $SHELL
 }
 
 $*
