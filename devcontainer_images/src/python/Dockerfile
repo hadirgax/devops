@@ -1,5 +1,5 @@
 # [Choice] Python version from https://hub.docker.com/_/python
-FROM python:3.12-slim-bookworm
+FROM python:3.13.1-slim-bookworm
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -41,7 +41,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.46.0
+ARG GIT_VERSION=2.48.1
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \

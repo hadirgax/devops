@@ -1,4 +1,4 @@
-FROM ubuntu:jammy
+FROM ubuntu:noble
 
 LABEL maintainer="hadirgax"
 
@@ -42,7 +42,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.46.0
+ARG GIT_VERSION=2.48.1
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
@@ -83,9 +83,9 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 CMD [ "/bin/bash" ]
 
 ENV PATH /opt/conda/bin:$PATH
-ARG CONDA_VERSION=py312_24.5.0-0
+ARG CONDA_VERSION=py312_24.11.1-0
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="4b3b3b1b99215e85fd73fb2c2d7ebf318ac942a457072de62d885056556eb83e"
+ARG SHA256SUM="636b209b00b6673471f846581829d4b96b9c3378679925a59a584257c3fef5a3"
 
 RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
