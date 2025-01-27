@@ -51,7 +51,7 @@ RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xz
     rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=devcon
-ARG USER_GID=1000
+ARG USER_GID=1001
 ARG USER_HOME="/home/${USERNAME}"
 RUN groupadd --gid ${USER_GID} ${USERNAME} && \
     useradd -s /bin/bash --gid ${USER_GID} -m ${USERNAME} && \
