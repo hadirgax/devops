@@ -10,6 +10,7 @@ ENV PYTHONFAULTHANDLER 1
 RUN set -eux; \
     apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
+        apt-transport-https \
         bzip2 \
         build-essential \
         ca-certificates \
