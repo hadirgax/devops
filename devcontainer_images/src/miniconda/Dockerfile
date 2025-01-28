@@ -30,6 +30,7 @@ RUN set -eux; \
         openssh-client \
         procps \
         p7zip-full \
+        sq \
         subversion \
         sudo \
         tar \
