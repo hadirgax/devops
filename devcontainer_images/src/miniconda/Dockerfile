@@ -84,7 +84,7 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 
 CMD [ "/bin/bash" ]
 
-ENV PATH /opt/conda/bin:$PATH
+ENV PATH ${USER_HOME}/conda/bin:$PATH
 ARG CONDA_VERSION=py312_24.11.1-0
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
 ARG SHA256SUM="636b209b00b6673471f846581829d4b96b9c3378679925a59a584257c3fef5a3"
@@ -93,16 +93,15 @@ RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
     echo "${SHA256SUM} /tmp/miniconda.sh" > /tmp/shasum && \
     sha256sum --check --status /tmp/shasum && \
-    mkdir -p /opt && \
-    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
     rm /tmp/miniconda.sh /tmp/shasum && \
-    chown -R ${USER_GID}:${USERNAME} /opt/conda && \
-    eval "$(/opt/conda/bin/conda shell.bash hook)" && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
+    eval "$(${USER_HOME}/conda/bin/conda shell.bash hook)" && \
+    ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
+    find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
     conda update --all -y && \
     conda clean -afy && \
-    chmod 0775 /opt/conda && \
+    chmod 0775 ${USER_HOME}/conda && \
     conda init bash && \
     conda init zsh

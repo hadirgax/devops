@@ -18,7 +18,6 @@ function set_nameserver {
         && chattr -f +i /etc/resolv.conf
 }
 
-
 function update_and_install {
     echo;echo ">>>>> Installing tools... >>>>>"
     install_packages_and_tools
@@ -44,7 +43,6 @@ function update_and_install {
     echo;echo ">>>>> Cleaning installation... >>>>>"
     sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 }
-
 
 function install_packages_and_tools {
     sudo apt-get update -yq && export DEBIAN_FRONTEND=noninteractive \
@@ -78,7 +76,6 @@ function install_packages_and_tools {
         # netcat \# rsync \# subversion \# tar \# wget
 }
 
-
 function install_git {
     GIT_VERSION="2.48.1" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
@@ -93,7 +90,6 @@ function install_git {
     # This configuration ensures that line endings in Git repositories are normalized to LF (Unix-style) endings,
     # git config --global core.autocrlf input
 }
-
 
 function configuring_oh_my_zsh() {
     # Adapted, simplified inline Oh My Zsh! install steps that adds, defaults to a codespaces theme.
@@ -159,7 +155,7 @@ function install_miniconda() {
     sudo ln -s $HOME/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     sudo find $HOME/conda/ -follow -type f -name '*.a' -delete && \
     sudo find $HOME/conda/ -follow -type f -name '*.js.map' -delete && \
-    conda update --all && \
+    conda update --all -y && \
     conda clean -afy && \
     conda init bash && \
     conda init zsh
@@ -171,7 +167,6 @@ function install-golang() {
     export PATH=$PATH:/usr/local/go/bin
     go version
 }
-
 
 function install-gcloud() {
     curl https://sdk.cloud.google.com > /tmp/install-gcloud.sh
