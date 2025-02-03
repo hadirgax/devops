@@ -1,49 +1,49 @@
 # >>> Default tools
-winget install --id 7zip.7Zip
-winget install --id Anaconda.Miniconda3
-winget install --id Brave.Brave
-winget install --id calibre.calibre
-winget install --id dbeaver.dbeaver
-winget install --id Docker.DockerDesktop
-winget install --id alexx2000.DoubleCommander
-winget install --id FastStone.Viewer
-winget install --id Git.Git
-winget install --id Google.Chrome
-winget install --id Google.GoogleDrive
-winget install --id JetBrains.Toolbox
-winget install --id Neovim.Neovim
-winget install --id Notion.Notion
-winget install --id Microsoft.DotNet.DesktopRuntime.6
-winget install --id Microsoft.PowerShell
-winget install --id Microsoft.Teams
-winget install --id Microsoft.VCRedist.2015+.x64
-winget install --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"'
-winget install --id Microsoft.WindowsTerminal
-winget install --id Mobatek.MobaXterm
-winget install --id Mozilla.Firefox
-winget install --id Notepad++.Notepad++
-winget install --id SMPlayer.SMPlayer
-winget install --id Spotify.Spotify
-winget install --id Stoplight.Studio
-winget install --id Tarma.PublishOrPerish
-winget install --id TrackerSoftware.PDF-XChangeEditor
-winget install --id Zoom.Zoom
-winget install -e --id Microsoft.AzureCLI
-winget install -e --id Microsoft.Azd
+winget install --id 7zip.7Zip --source winget
+winget install --id Anaconda.Miniconda3 --source winget
+winget install --id Brave.Brave --source winget
+winget install --id calibre.calibre --source winget
+winget install --id dbeaver.dbeaver --source winget
+winget install --id Docker.DockerDesktop --source winget
+winget install --id alexx2000.DoubleCommander --source winget
+winget install --id FastStone.Viewer --source winget
+winget install --id Git.Git --source winget
+winget install --id Google.Chrome --source winget
+winget install --id Google.GoogleDrive --source winget
+winget install --id JetBrains.Toolbox --source winget
+winget install --id Neovim.Neovim --source winget
+winget install --id Notion.Notion --source winget
+winget install --id Microsoft.DotNet.DesktopRuntime.6 --source winget
+winget install --id Microsoft.PowerShell --source winget
+winget install --id Microsoft.Teams --source winget
+winget install --id Microsoft.VCRedist.2015+.x64 --source winget
+winget install --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"' --source winget
+winget install --id Microsoft.WindowsTerminal --source winget
+winget install --id Mobatek.MobaXterm --source winget
+winget install --id Mozilla.Firefox --source winget
+winget install --id Notepad++.Notepad++ --source winget
+winget install --id SMPlayer.SMPlayer --source winget
+winget install --id Spotify.Spotify --source winget
+winget install --id Stoplight.Studio --source winget
+winget install --id Tarma.PublishOrPerish --source winget
+winget install --id TrackerSoftware.PDF-XChangeEditor --source winget
+winget install --id Zoom.Zoom --source winget
+winget install -e --id Microsoft.AzureCLI --source winget
+winget install -e --id Microsoft.Azd --source winget
 
 #>>> Optional and interesting stuff
-# winget install --id GIMP.GIMP
-# winget install --id HandBrake.HandBrake
-# winget install --id Inkscape.Inkscape
-# winget install --id Insomnia.Insomnia
-# winget install --id KDE.Kdenlive
-# winget install --id KDE.Krita
-# winget install --id Maximus5.ConEmu
-# winget install --id Postman.Postman
-# winget install --id PuTTY.PuTTY
-# winget install --id Nushell.Nushell
-# winget install --id OpenWhisperSystems.Signal
-# winget install --id Wacom.WacomTabletDrive
+# winget install --id GIMP.GIMP --source winget
+# winget install --id HandBrake.HandBrake --source winget
+# winget install --id Inkscape.Inkscape --source winget
+# winget install --id Insomnia.Insomnia --source winget
+# winget install --id KDE.Kdenlive --source winget
+# winget install --id KDE.Krita --source winget
+# winget install --id Maximus5.ConEmu --source winget
+# winget install --id Postman.Postman --source winget
+# winget install --id PuTTY.PuTTY --source winget
+# winget install --id Nushell.Nushell --source winget
+# winget install --id OpenWhisperSystems.Signal --source winget
+# winget install --id Wacom.WacomTabletDrive --source winget
 
 # Other urls to download packages
 # ==============================
