@@ -1,5 +1,16 @@
 {
   "image": "hadirgax/devcontainer-miniconda:main",
   "features": {
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "github.copilot",
+        "github.copilot-chat",
+        "github.vscode-github-actions",
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ]
+    }
   }
 }
