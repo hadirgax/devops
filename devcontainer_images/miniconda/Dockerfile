@@ -74,15 +74,14 @@ RUN set -x && \
     bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
     rm /tmp/miniconda.sh /tmp/shasum && \
     chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
-    eval "$(${USER_HOME}/conda/bin/conda shell.bash hook)" && \
     ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo '. /opt/conda/etc/profile.d/conda.sh' >> ${USER_HOME}/.bashrc && \
+    echo 'conda activate base' >> ${USER_HOME}/.bashrc && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
     conda update --all -y && \
     conda clean -afy && \
-    chmod 0775 ${USER_HOME}/conda && \
-    conda init bash
-    # && \ conda init zsh
+    chmod 0775 ${USER_HOME}/conda
 
 RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     umask g-w,o-w && \
