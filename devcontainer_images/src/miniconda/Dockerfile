@@ -60,6 +60,30 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} && \
     echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
     chmod 0440 /etc/sudoers.d/${USERNAME}
 
+CMD [ "/bin/bash" ]
+
+ENV PATH ${USER_HOME}/conda/bin:$PATH
+ARG CONDA_VERSION=py312_25.1.1-2
+ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
+ARG SHA256SUM="4766d85b5f7d235ce250e998ebb5a8a8210cbd4f2b0fea4d2177b3ed9ea87884"
+
+RUN set -x && \
+    wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
+    echo "${SHA256SUM} /tmp/miniconda.sh" > /tmp/shasum && \
+    sha256sum --check --status /tmp/shasum && \
+    bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
+    rm /tmp/miniconda.sh /tmp/shasum && \
+    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
+    eval "$(${USER_HOME}/conda/bin/conda shell.bash hook)" && \
+    ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
+    find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
+    conda update --all -y && \
+    conda clean -afy && \
+    chmod 0775 ${USER_HOME}/conda && \
+    conda init bash
+    # && \ conda init zsh
+
 RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     umask g-w,o-w && \
     mkdir -p "${OMZ_DIR}" && \
@@ -81,27 +105,3 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     chsh --shell /bin/zsh ${USERNAME} && \
     chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/.zshrc && \
     echo 'zsh' >> ${USER_HOME}/.bashrc
-
-CMD [ "/bin/bash" ]
-
-ENV PATH ${USER_HOME}/conda/bin:$PATH
-ARG CONDA_VERSION=py312_24.11.1-0
-ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="636b209b00b6673471f846581829d4b96b9c3378679925a59a584257c3fef5a3"
-
-RUN set -x && \
-    wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
-    echo "${SHA256SUM} /tmp/miniconda.sh" > /tmp/shasum && \
-    sha256sum --check --status /tmp/shasum && \
-    bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
-    rm /tmp/miniconda.sh /tmp/shasum && \
-    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
-    eval "$(${USER_HOME}/conda/bin/conda shell.bash hook)" && \
-    ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
-    find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
-    conda update --all -y && \
-    conda clean -afy && \
-    chmod 0775 ${USER_HOME}/conda && \
-    conda init bash && \
-    conda init zsh
