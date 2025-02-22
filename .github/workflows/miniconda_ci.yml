@@ -46,6 +46,7 @@ jobs:
           images: hadirgax/devcontainer-miniconda
           tags: |
             type=ref,event=branch
+            type=match,pattern=miniconda-v(.*),group=1
 
       - name: build miniconda
         uses: docker/build-push-action@v6.14.0

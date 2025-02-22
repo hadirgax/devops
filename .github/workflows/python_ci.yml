@@ -46,6 +46,7 @@ jobs:
           images: hadirgax/devcontainer-python
           tags: |
             type=ref,event=branch
+            type=match,pattern=python-v(.*),group=1
 
       - name: build python
         uses: docker/build-push-action@v6.14.0
