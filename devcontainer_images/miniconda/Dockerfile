@@ -97,10 +97,10 @@ RUN set -x && \
     rm /tmp/miniconda.sh /tmp/shasum && \
     chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
     ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> ${USER_HOME}/.zshrc && \
-    echo 'conda activate base' >> ${USER_HOME}/.zshrc && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
+    echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> ${USER_HOME}/.zshrc && \
+    echo 'conda activate venv' >> ${USER_HOME}/.zshrc && \
     conda update --all -y && \
     conda clean -afy && \
     chmod 0775 ${USER_HOME}/conda && \
