@@ -104,3 +104,8 @@ RUN set -x && \
     conda update --all -y && \
     conda clean -afy && \
     chmod 0775 ${USER_HOME}/conda
+
+RUN for version in 3.11 3.12 3.13; do \
+    conda create -n venv-py${version} -c conda-forge -y python=${version} pip=25 && \
+    ${USER_HOME}/conda/envs/venv-py${version}/bin/python -m pip install uv; \
+    done
