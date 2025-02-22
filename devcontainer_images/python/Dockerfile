@@ -1,5 +1,5 @@
 # [Choice] Python version from https://hub.docker.com/_/python
-FROM python:3.13.1-slim-bookworm
+FROM python:3.13.2-slim-bookworm
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -50,7 +50,7 @@ RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xz
     rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=devcon
-ARG USER_GID=1000
+ARG USER_GID=1001
 ARG USER_HOME="/home/${USERNAME}"
 RUN groupadd --gid ${USER_GID} ${USERNAME} && \
     useradd -s /bin/bash --gid ${USER_GID} -m ${USERNAME} && \
