@@ -16,6 +16,7 @@ RUN set -eux; \
         gettext \
         gnupg \
         htop \
+        jq \
         libcurl?-openssl-dev \
         libexpat1-dev \
         libfontconfig1 \
