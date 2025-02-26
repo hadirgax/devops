@@ -1,0 +1,60 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "devcon",
+  "workspaceFolder": "/workspace",
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // Use 'postStartCommand' to run each time the container is successfully started.
+  "postStartCommand": "scripts/entrypoint.sh",
+
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "davidanson.vscode-markdownlint",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "github.copilot",
+        "github.copilot-chat",
+        "naumovs.color-highlight",
+        "mechatroner.rainbow-csv",
+        "ms-azuretools.vscode-docker",
+        "ms-python.isort",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "tamasfe.even-better-toml",
+        "visualstudioexptteam.vscodeintel"
+      ]
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [5432],
+
+  // "portsAttributes": {
+    // "3000": {
+    //   "label": "frontend"
+    // },
+    // "4000": {
+    //   "label": "backend"
+    // },
+    // "5432": {
+    //   "label": "database"
+    // }
+  // },
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  "remoteUser": "devcon",
+  "remoteEnv": {
+    "PROJECT_NAME": "${localWorkspaceFolderBasename}",
+    "VENV_NAME": "venv"
+  }
+}
