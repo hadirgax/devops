@@ -1,0 +1,142 @@
+[project]
+name = "default-project-name"
+version = "0.1.0"
+readme = "README.md"
+requires-python = "==3.13"
+authors = [{ name = "hadirgax", email = "user@mail.com" }]
+dependencies = [
+    "pydantic",
+    "fastapi",
+    "uvicorn",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "coverage",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "ruff",
+]
+
+[tool.mypy]
+python_version = "3.13"
+check_untyped_defs = true
+strict = true
+exclude = [
+    ".devcontainer",
+    ".github",
+    ".reports",
+    ".vscode",
+    "data",
+    "docs",
+    "scripts",
+]
+
+[[tool.mypy.overrides]]
+module = "app.backend.*"
+warn_unused_ignores = false
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "services.*"
+warn_unused_ignores = false
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_missing_imports = true
+check_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+pythonpath = ["app", "scripts", "services"]
+
+[tool.coverage.run]
+parallel = true
+source = ["./app", "./services"]
+data_file = "./.reports/.coverage"
+context = '${CONTEXT}'
+omit = ["./tests/*"]
+
+[tool.coverage.paths]
+source = ["app", "services"]
+
+[tool.coverage.report]
+show_missing = true
+ignore_errors = true
+
+[tool.coverage.html]
+output = "./.reports/coverage_html_report"
+
+[tool.ruff]
+target-version = "py313"
+exclude = [
+    ".devcontainer",
+    ".git",
+    ".github",
+    ".mypy_cache",
+    ".reports",
+    ".ruff_cache",
+    ".vscode",
+    "__pypackages__",
+    "data",
+    "docs",
+    "scripts",
+]
+include = [
+    "app",
+    "services",
+    "tests",
+]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "auto"
+quote-style = "double"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG001", # unused arguments in functions
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "B904",  # Allow raising exceptions without from e, for HTTPException
+    "COM812", "ISC001" # Conflicts with the formatter
+]
+
+[tool.ruff.lint.isort]
+known-local-folder = [
+    "data",
+    "scripts",
+]
+known-first-party = [
+    "app",
+    "services",
+    "tests",
+]
+known-third-party = [
+    "pydantic",
+    "fastapi",
+    "uvicorn",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 5

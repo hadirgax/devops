@@ -1,0 +1,19 @@
+services:
+  devcon:
+    user: devcon
+    image: hadirgax/devcontainer-miniconda:latest
+    platform: linux/amd64
+    volumes:
+      - ..:/workspace:cached
+      - conda-pkgs-cache:/home/devcon/.conda/pkgs
+    depends_on:
+      - redis
+    command: /bin/bash -c "while sleep 1000; do :; done"
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+volumes:
+  conda-pkgs-cache:
