@@ -1,0 +1,8 @@
+# dependencies
+fastapi
+pandas
+pydantic
+pydantic-settings
+python-multipart
+redis
+uvicorn

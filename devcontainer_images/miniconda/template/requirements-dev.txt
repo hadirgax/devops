@@ -1,0 +1,13 @@
+-r requirements.txt
+
+# dependencies
+coverage
+bzt
+debugpy
+isort
+ipykernel
+mccabe
+mypy
+mypy-extensions
+pre-commit
+pytest
