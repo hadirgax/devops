@@ -16,6 +16,15 @@
   // Configure tool-specific properties.
   "customizations": {
     "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/home/devcon/conda/envs/venv/bin/python",
+        "files.exclude": {
+          "**/.git": true,
+          "**/.mypy_cache": true,
+          "**/.ruff_cache": true,
+          "**/__pycache__": true
+        }
+      },
       "extensions": [
         "davidanson.vscode-markdownlint",
         "donjayamanne.githistory",
