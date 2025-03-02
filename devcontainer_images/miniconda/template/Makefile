@@ -1,7 +1,7 @@
 PROJECT_NAME ?= default-project-name
 VENV_NAME ?= venv
 VENV_BIN_PATH ?= $$(conda info --base)/envs/$(VENV_NAME)/bin
-VENV_PYTHON_VERSION ?= $$(grep -E '^\s*requires-python\s*=' pyproject.toml | sed -E 's/.*([0-9]+\.[0-9]+).*/\1/')
+VENV_PYTHON_VERSION ?= $(shell grep -E '^\s*requires-python\s*=' pyproject.toml | sed -E 's/.*([0-9]+\.[0-9]+).*/\1/')
 
 export ENVIRONMENT ?= local
 export PYTHONPATH := .:./app
