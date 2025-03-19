@@ -45,7 +45,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.48.1
+ARG GIT_VERSION=2.49.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
@@ -59,7 +59,8 @@ ARG USER_HOME="/home/${USERNAME}"
 RUN groupadd --gid ${USER_GID} ${USERNAME} && \
     useradd -s /bin/bash --gid ${USER_GID} -m ${USERNAME} && \
     echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} && \
-    chmod 0440 /etc/sudoers.d/${USERNAME}
+    chmod 0440 /etc/sudoers.d/${USERNAME} && \
+    chown -R ${USER_GID}:${USERNAME} ${USER_HOME}
 
 RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
     umask g-w,o-w && \
@@ -103,6 +104,6 @@ RUN set -x && \
     echo 'conda activate venv' >> ${USER_HOME}/.zshrc && \
     conda update --all -y && \
     conda clean -afy && \
-    conda create -n venv -c conda-forge -y --no-default-packages && \
+    conda create -n venv -c conda-forge -qy python=3.12 --no-default-packages && \
     chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
     chmod -R 0775 ${USER_HOME}/conda
