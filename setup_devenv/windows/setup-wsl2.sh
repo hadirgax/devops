@@ -55,6 +55,7 @@ function install_packages_and_tools {
         dirmngr \
         file \
         htop \
+        jq \
         gcc \
         gettext \
         gnupg2 \
@@ -68,7 +69,10 @@ function install_packages_and_tools {
         unzip \
         zlib1g-dev \
         zsh \
-    && sudo apt-get upgrade -yq
+    && sudo apt-get upgrade -yq \
+    && sudo update-ca-certificates \
+    && sudo apt-get clean \
+    && sudo rm -rf /var/lib/apt/lists/*
         # bzip2 \# dconf-cli \# dh-autoreconf \# gstreamer1.0-libav \# htop \# install-info \
         # libatk-bridge2.0-0 \# libcups2-dev \# libdbus-glib-1-2 \# libgbm-dev \# libglib2.0-0 \
         # libgtk-3-0 \# libnss3-tools \# libsm6 \# libx11-xcb1 \# libxcomposite-dev \# libxext6 \
@@ -77,15 +81,15 @@ function install_packages_and_tools {
 }
 
 function install_git {
-    GIT_VERSION="2.48.1" && \
+    GIT_VERSION="2.49.0" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
-    echo;echo "Building..."
+    echo;echo "Building Git..."
     cd /tmp/git-${GIT_VERSION} && \
     sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
     sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1
     sudo rm -rf /tmp/git-${GIT_VERSION} && \
-    sudo rm -rf /var/lib/apt/lists/*
+    sudo rm -rf /var/lib/apt/lists/* && \
     git --version
     # This configuration ensures that line endings in Git repositories are normalized to LF (Unix-style) endings,
     # git config --global core.autocrlf input
@@ -113,7 +117,6 @@ function configuring_oh_my_zsh() {
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OMZ_DIR}/custom/plugins/zsh-syntax-highlighting && \
     cd ${OMZ_DIR} && \
     git repack -a -d -f --depth=1 --window=1 && \
-    echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh && \
     chsh --shell /bin/zsh ${USER} && \
     chown -R ${UID}:${USER} ${ZSHRC_USER_FILE}
 
@@ -151,14 +154,13 @@ function install_miniconda() {
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
     sudo bash ${MINICONDA_TMP_FILE} -b -p $HOME/conda && \
     sudo chown -R $(echo $USER) $HOME/conda && \
-    eval "$($HOME/conda/bin/conda shell.bash hook)" && \
     sudo ln -s $HOME/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     sudo find $HOME/conda/ -follow -type f -name '*.a' -delete && \
     sudo find $HOME/conda/ -follow -type f -name '*.js.map' -delete && \
-    conda update --all -y && \
-    conda clean -afy && \
-    conda init bash && \
-    conda init zsh
+    echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> $HOME/.zshrc && \
+    echo 'conda activate base' >> $HOME/.zshrc && \
+    $HOME/conda/bin/conda update --all -y && \
+    $HOME/conda/bin/conda clean -afy
 }
 
 function install-golang() {
