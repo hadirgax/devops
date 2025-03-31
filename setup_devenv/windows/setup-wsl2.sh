@@ -117,7 +117,7 @@ function configuring_oh_my_zsh() {
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OMZ_DIR}/custom/plugins/zsh-syntax-highlighting && \
     cd ${OMZ_DIR} && \
     git repack -a -d -f --depth=1 --window=1 && \
-    chsh --shell /bin/zsh ${USER} && \
+    sudo chsh --shell /bin/zsh ${USER} && \
     chown -R ${UID}:${USER} ${ZSHRC_USER_FILE}
 
     # User aliases
