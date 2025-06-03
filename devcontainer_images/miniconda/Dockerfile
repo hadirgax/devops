@@ -87,9 +87,9 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 CMD [ "/bin/bash" ]
 
 ENV PATH ${USER_HOME}/conda/bin:$PATH
-ARG CONDA_VERSION=py312_25.1.1-2
+ARG CONDA_VERSION=py313_25.3.1-1
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="4766d85b5f7d235ce250e998ebb5a8a8210cbd4f2b0fea4d2177b3ed9ea87884"
+ARG SHA256SUM="53a86109463cfd70ba7acab396d416e623012914eee004729e1ecd6fe94e8c69"
 
 RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
