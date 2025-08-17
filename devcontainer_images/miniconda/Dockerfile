@@ -102,6 +102,8 @@ RUN set -x && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
     echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> ${USER_HOME}/.zshrc && \
     echo 'conda activate venv' >> ${USER_HOME}/.zshrc && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     conda update --all -y && \
     conda clean -afy && \
     conda create -n venv -c conda-forge -qy python=3.12 --no-default-packages && \
