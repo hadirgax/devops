@@ -45,7 +45,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.50.0
+ARG GIT_VERSION=2.50.1
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
@@ -87,9 +87,9 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 CMD [ "/bin/bash" ]
 
 ENV PATH ${USER_HOME}/conda/bin:$PATH
-ARG CONDA_VERSION=py313_25.3.1-1
+ARG CONDA_VERSION=py313_25.5.1-1
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="53a86109463cfd70ba7acab396d416e623012914eee004729e1ecd6fe94e8c69"
+ARG SHA256SUM="612af113b49db0368e2be41ac4d51b7088eebd5f31daeeb89f23fff8f920db58"
 
 RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
