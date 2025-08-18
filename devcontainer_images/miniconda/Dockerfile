@@ -97,13 +97,13 @@ RUN set -x && \
     sha256sum --check --status /tmp/shasum && \
     bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
     rm /tmp/miniconda.sh /tmp/shasum && \
+    ${USER_HOME}/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    ${USER_HOME}/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
     echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> ${USER_HOME}/.zshrc && \
     echo 'conda activate venv' >> ${USER_HOME}/.zshrc && \
-    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
-    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     conda update --all -y && \
     conda clean -afy && \
     conda create -n venv -c conda-forge -qy python=3.12 --no-default-packages && \
