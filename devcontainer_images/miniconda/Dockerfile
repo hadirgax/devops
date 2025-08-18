@@ -3,8 +3,8 @@ FROM ubuntu:noble
 LABEL maintainer="hadirgax"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONFAULTHANDLER=1
 
 # hadolint ignore=DL3008
 RUN set -eux; \
@@ -86,10 +86,12 @@ RUN OMZ_DIR=${USER_HOME}/.oh-my-zsh && \
 
 CMD [ "/bin/bash" ]
 
-ENV PATH ${USER_HOME}/conda/bin:$PATH
+ENV CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes
+ENV PATH=${USER_HOME}/conda/bin:$PATH
 ARG CONDA_VERSION=py313_25.5.1-1
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
 ARG SHA256SUM="612af113b49db0368e2be41ac4d51b7088eebd5f31daeeb89f23fff8f920db58"
+
 
 RUN set -x && \
     wget "${MINICONDA_URL}" -O /tmp/miniconda.sh -q && \
@@ -97,8 +99,6 @@ RUN set -x && \
     sha256sum --check --status /tmp/shasum && \
     bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
     rm /tmp/miniconda.sh /tmp/shasum && \
-    ${USER_HOME}/conda/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
-    ${USER_HOME}/conda/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
