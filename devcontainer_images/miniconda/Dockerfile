@@ -97,8 +97,8 @@ RUN set -x && \
     sha256sum --check --status /tmp/shasum && \
     bash /tmp/miniconda.sh -b -p ${USER_HOME}/conda && \
     rm /tmp/miniconda.sh /tmp/shasum && \
-    ${USER_HOME}/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
-    ${USER_HOME}/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
+    ${USER_HOME}/conda/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    ${USER_HOME}/conda/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     ln -s ${USER_HOME}/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.a' -delete && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
