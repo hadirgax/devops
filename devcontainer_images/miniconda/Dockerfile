@@ -45,7 +45,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.50.1
+ARG GIT_VERSION=2.51.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
@@ -88,9 +88,9 @@ CMD [ "/bin/bash" ]
 
 ENV CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes
 ENV PATH=${USER_HOME}/conda/bin:$PATH
-ARG CONDA_VERSION=py313_25.5.1-1
+ARG CONDA_VERSION=py313_25.7.0-2
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="612af113b49db0368e2be41ac4d51b7088eebd5f31daeeb89f23fff8f920db58"
+ARG SHA256SUM="dda3629462ba1cfa72eb74535214c2e315c77f1cfb0f02046537e99f1bf64abc"
 
 
 RUN set -x && \

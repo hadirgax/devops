@@ -1,5 +1,5 @@
 # >>> Default tools
-winget install --id 7zip.7Zip -e --source winget
+winget install --id 7zip.7zip -e --source winget
 winget install --id Anaconda.Miniconda3 -e --source winget
 winget install --id Brave.Brave -e --source winget
 winget install --id calibre.calibre -e --source winget
