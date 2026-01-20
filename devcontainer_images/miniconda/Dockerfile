@@ -17,6 +17,8 @@ RUN set -eux; \
         curl \
         gettext \
         gnupg \
+        graphviz \
+        graphviz-dev \
         htop \
         jq \
         libcurl?-openssl-dev \
@@ -48,6 +50,7 @@ RUN set -eux; \
 ARG GIT_VERSION=2.51.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
+    mkdir -p /usr/local/share/gitweb && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1 && \
     rm -rf /tmp/git-${GIT_VERSION} && \
