@@ -47,7 +47,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG GIT_VERSION=2.51.0
+ARG GIT_VERSION=2.52.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     mkdir -p /usr/local/share/gitweb && \
@@ -91,9 +91,9 @@ CMD [ "/bin/bash" ]
 
 ENV CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes
 ENV PATH=${USER_HOME}/conda/bin:$PATH
-ARG CONDA_VERSION=py313_25.7.0-2
+ARG CONDA_VERSION=py313_25.11.1-1
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="dda3629462ba1cfa72eb74535214c2e315c77f1cfb0f02046537e99f1bf64abc"
+ARG SHA256SUM="e0b10e050e8928e2eb9aad2c522ee3b5d31d30048b8a9997663a8a460d538cef"
 
 
 RUN set -x && \
