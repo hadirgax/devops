@@ -15,6 +15,7 @@ winget install --id Neovim.Neovim -e --source winget
 winget install --id Notion.Notion -e --source winget
 winget install --id Microsoft.DotNet.DesktopRuntime.6 -e --source winget
 winget install --id Microsoft.PowerShell -e --source winget
+winget install --id Microsoft.PowerToys -e --source winget
 winget install --id Microsoft.Teams -e --source winget
 winget install --id Microsoft.VCRedist.2015+.x64 -e --source winget
 winget install --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"' -e --source winget
@@ -28,8 +29,6 @@ winget install --id Stoplight.Studio -e --source winget
 winget install --id Tarma.PublishOrPerish -e --source winget
 winget install --id TrackerSoftware.PDF-XChangeEditor -e --source winget
 winget install --id Zoom.Zoom -e --source winget
-winget install --id Microsoft.AzureCLI -e --source winget
-winget install --id Microsoft.Azd -e --source winget
 
 #>>> Optional and interesting stuff
 # winget install --id GIMP.GIMP.3 -e --source winget
@@ -39,6 +38,8 @@ winget install --id Microsoft.Azd -e --source winget
 # winget install --id KDE.Kdenlive -e --source winget
 # winget install --id KDE.Krita -e --source winget
 # winget install --id Maximus5.ConEmu -e --source winget
+# winget install --id Microsoft.Azd -e --source winget
+# winget install --id Microsoft.AzureCLI -e --source winget
 # winget install --id Postman.Postman -e --source winget
 # winget install --id PuTTY.PuTTY -e --source winget
 # winget install --id Nushell.Nushell -e --source winget
