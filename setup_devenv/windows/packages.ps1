@@ -11,8 +11,6 @@ winget install --id Git.Git -e --source winget
 winget install --id Google.Chrome -e --source winget
 winget install --id Google.GoogleDrive -e --source winget
 winget install --id JetBrains.Toolbox -e --source winget
-winget install --id Neovim.Neovim -e --source winget
-winget install --id Notion.Notion -e --source winget
 winget install --id Microsoft.DotNet.DesktopRuntime.6 -e --source winget
 winget install --id Microsoft.PowerShell -e --source winget
 winget install --id Microsoft.PowerToys -e --source winget
@@ -23,6 +21,7 @@ winget install --id Microsoft.WindowsTerminal -e --source winget
 winget install --id Mobatek.MobaXterm -e --source winget
 winget install --id Mozilla.Firefox -e --source winget
 winget install --id Notepad++.Notepad++ -e --source winget
+winget install --id Notion.Notion -e --source winget
 winget install --id SMPlayer.SMPlayer -e --source winget
 winget install --id Spotify.Spotify -e --source winget
 winget install --id Stoplight.Studio -e --source winget
@@ -40,6 +39,7 @@ winget install --id Zoom.Zoom -e --source winget
 # winget install --id Maximus5.ConEmu -e --source winget
 # winget install --id Microsoft.Azd -e --source winget
 # winget install --id Microsoft.AzureCLI -e --source winget
+# winget install --id Neovim.Neovim -e --source winget
 # winget install --id Postman.Postman -e --source winget
 # winget install --id PuTTY.PuTTY -e --source winget
 # winget install --id Nushell.Nushell -e --source winget
