@@ -11,33 +11,38 @@ RUN set -eux; \
     apt-get update -q && \
     apt-get install -q -y --no-install-recommends \
         apt-transport-https \
-        bzip2 \
         build-essential \
+        bzip2 \
         ca-certificates \
+        cmake \
         curl \
+        dh-autoreconf \
+        dirmngr \
+        file \
+        gcc \
         gettext \
-        gnupg \
+        gnupg2 \
         graphviz \
         graphviz-dev \
         htop \
         jq \
-        libcurl?-openssl-dev \
+        libcurl4-gnutls-dev \
         libexpat1-dev \
         libfontconfig1 \
         libglib2.0-0 \
         libpcre2-dev \
-        libsm6 \
         libssl-dev \
-        libxext6 \
-        libxrender1 \
+        libz-dev \
         netbase \
+        net-tools \
         openssh-client \
-        procps \
         p7zip-full \
+        procps \
         sq \
         subversion \
         sudo \
         tar \
+        unzip \
         wget \
         zip \
         zlib1g-dev \
@@ -46,8 +51,8 @@ RUN set -eux; \
     && update-ca-certificates \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-ARG GIT_VERSION=2.52.0
+    
+ARG GIT_VERSION=2.53.0
 RUN curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     cd /tmp/git-${GIT_VERSION} && \
     mkdir -p /usr/local/share/gitweb && \
