@@ -49,9 +49,11 @@ function install_packages_and_tools {
     && sudo apt-get install -q -y --no-install-recommends \
         apt-transport-https \
         build-essential \
+        bzip2 \
         ca-certificates \
         curl \
         cmake \
+        dh-autoreconf \
         dirmngr \
         file \
         htop \
@@ -59,35 +61,48 @@ function install_packages_and_tools {
         gcc \
         gettext \
         gnupg2 \
-        libcurl?-openssl-dev \
+        libcurl4-gnutls-dev \
         libexpat1-dev \
+        libfontconfig1 \
+        libglib2.0-0 \
         libpcre2-dev \
+        libsm6 \
         libssl-dev \
+        libxext6 \
+        libxrender1 \
+        libz-dev \
+        netbase \
         net-tools \
         openssh-client \
+        p7zip-full \
         procps \
+        sq \
+        subversion \
+        sudo \
+        tar \
         unzip \
+        wget \
+        zip \
         zlib1g-dev \
         zsh \
     && sudo apt-get upgrade -yq \
     && sudo update-ca-certificates \
     && sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/*
-        # bzip2 \# dconf-cli \# dh-autoreconf \# gstreamer1.0-libav \# htop \# install-info \
-        # libatk-bridge2.0-0 \# libcups2-dev \# libdbus-glib-1-2 \# libgbm-dev \# libglib2.0-0 \
-        # libgtk-3-0 \# libnss3-tools \# libsm6 \# libx11-xcb1 \# libxcomposite-dev \# libxext6 \
-        # libxkbcommon-x11-0 \# libxrandr2 \# libxrender1 \# libxtst6 \# libz-dev \# net-tools \
-        # netcat \# rsync \# subversion \# tar \# wget
+        # dconf-cli \# gstreamer1.0-libav \# install-info \# libatk-bridge2.0-0 \
+        # libcups2-dev \# libdbus-glib-1-2 \# libgbm-dev \# libgtk-3-0 \# libnss3-tools \
+        # libx11-xcb1 \# libxcomposite-dev \# libxkbcommon-x11-0 \# libxrandr2 \
+        # libxtst6 \# netcat \# rsync \
 }
 
 function install_git {
-    GIT_VERSION="2.49.0" && \
+    GIT_VERSION="2.53.0" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
-    curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
-    echo;echo "Building Git..."
+    curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
+    echo;echo "Building Git..." && \
     cd /tmp/git-${GIT_VERSION} && \
-    sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
-    sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1
+    make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
+    make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1 && \
     sudo rm -rf /tmp/git-${GIT_VERSION} && \
     sudo rm -rf /var/lib/apt/lists/* && \
     git --version
