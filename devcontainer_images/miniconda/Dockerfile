@@ -97,6 +97,7 @@ CMD [ "/bin/bash" ]
 ENV CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes
 ENV PATH=${USER_HOME}/conda/bin:$PATH
 ARG CONDA_VERSION=py313_25.11.1-1
+ARG PYTHON_VERSION=3.13
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
 ARG SHA256SUM="e0b10e050e8928e2eb9aad2c522ee3b5d31d30048b8a9997663a8a460d538cef"
 
@@ -112,8 +113,14 @@ RUN set -x && \
     find ${USER_HOME}/conda/ -follow -type f -name '*.js.map' -delete && \
     echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> ${USER_HOME}/.zshrc && \
     echo 'conda activate venv' >> ${USER_HOME}/.zshrc && \
+    ${USER_HOME}/conda/bin/conda config --remove channels defaults && \
+    ${USER_HOME}/conda/bin/conda config --add channels nodefaults && \
+    ${USER_HOME}/conda/bin/conda config --add channels conda-forge && \
+    ${USER_HOME}/conda/bin/conda config --show channels && \
+    cp -f ${USER_HOME}/.condarc ${USER_HOME}/conda/.condarc && \
     conda update --all -y && \
     conda clean -afy && \
-    conda create -n venv -c conda-forge -qy python=3.12 --no-default-packages && \
+    conda create -n venv -c conda-forge -qy python=${PYTHON_VERSION} --no-default-packages && \
+    ${USER_HOME}/conda/envs/venv/bin/python -m pip install uv && \
     chown -R ${USER_GID}:${USERNAME} ${USER_HOME}/conda && \
     chmod -R 0775 ${USER_HOME}/conda
