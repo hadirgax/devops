@@ -165,17 +165,40 @@ function configuring_oh_my_zsh() {
 
 function install_miniconda() {
     MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
+    MINICONDA_SHA256SUM="e0b10e050e8928e2eb9aad2c522ee3b5d31d30048b8a9997663a8a460d538cef" && \
     MINICONDA_TMP_FILE=/tmp/miniconda.sh && \
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
+    echo "${MINICONDA_SHA256SUM} ${MINICONDA_TMP_FILE}" > /tmp/shasum && \
+    sha256sum --check --status /tmp/shasum && \
     sudo bash ${MINICONDA_TMP_FILE} -b -p $HOME/conda && \
+    sudo rm /tmp/miniconda.sh /tmp/shasum && \
     sudo chown -R $(echo $USER) $HOME/conda && \
     sudo ln -s $HOME/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     sudo find $HOME/conda/ -follow -type f -name '*.a' -delete && \
     sudo find $HOME/conda/ -follow -type f -name '*.js.map' -delete && \
     echo '. ${HOME}/conda/etc/profile.d/conda.sh' >> $HOME/.zshrc && \
     echo 'conda activate base' >> $HOME/.zshrc && \
+    $HOME/conda/bin/conda config --remove channels defaults && \
+    $HOME/conda/bin/conda config --add channels nodefaults && \
+    $HOME/conda/bin/conda config --add channels conda-forge && \
+    $HOME/conda/bin/conda config --show channels && \
+    cp -f $HOME/.condarc $HOME/conda/.condarc && \
     $HOME/conda/bin/conda update --all -y && \
     $HOME/conda/bin/conda clean -afy
+}
+
+function uninstall_miniconda() {
+    conda deactivate && \
+    sudo rm -rf $HOME/conda && \
+    sudo rm -rf $HOME/.conda && \
+    sudo rm -rf $HOME/.anaconda && \
+    sudo rm -rf $HOME/.condarc && \
+    sudo rm -rf /etc/profile.d/conda.sh && \
+    sed -i '/conda/d' $HOME/.zshrc
+}
+
+function install_astral_uv() {
+    curl -LsSf https://astral.sh/uv/install.sh | sh
 }
 
 function install-golang() {
