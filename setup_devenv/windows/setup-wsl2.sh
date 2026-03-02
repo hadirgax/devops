@@ -201,6 +201,22 @@ function install_astral_uv() {
     curl -LsSf https://astral.sh/uv/install.sh | sh
 }
 
+function install_nodejs() {
+    # Download and install fnm:
+    curl -o- https://fnm.vercel.app/install | bash
+    source ~/.zshrc
+    # Download and install Node.js:
+    fnm install 24
+    # Verify the Node.js version:
+    node -v # Should print "v24.14.0".
+    # Verify npm version:
+    npm -v # Should print "11.9.0".
+}
+
+function install_gemini_cli() {
+    npm install -g @google/gemini-cli
+}
+
 function install-golang() {
     wget -O /tmp/go1.21.5.linux-amd64.tar.gz https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
     rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
