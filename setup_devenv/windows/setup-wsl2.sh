@@ -230,6 +230,23 @@ function install-gcloud() {
     exec -l $SHELL
 }
 
+function create_ssh_key() {
+    local email_address=""
+    local platform=""
+
+    for arg in "$@"; do
+        case $arg in
+            email_address=*) email_address="${arg#*=}" ;;
+            platform=*)      platform="${arg#*=}" ;;
+        esac
+    done
+
+    ssh-keygen -t ed25519 -C "${email_address}" -f "${HOME}/.ssh/id_ed25519_${platform}" -N ""
+    eval "$(ssh-agent -s)"
+    ssh-add "${HOME}/.ssh/id_ed25519_${platform}"
+    cat "${HOME}/.ssh/id_ed25519_${platform}.pub"
+}
+
 function install-firebase() {
     curl https://firebase.tools | bash
     exec -l $SHELL
