@@ -282,6 +282,8 @@ EOF
     cat "${key_file}.pub"
 
     # use the ssh host config
+    # ssh my-server              # uses the correct key automatically
+    # git clone git@github.com:user/repo.git   # uses the github key
 }
 
 
