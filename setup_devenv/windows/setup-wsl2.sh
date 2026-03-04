@@ -241,11 +241,47 @@ function create_ssh_key() {
         esac
     done
 
+    # Resolve hostname from platform name
+    local hostname=""
+    case "${platform}" in
+        github)  hostname="github.com" ;;
+        gitlab)  hostname="gitlab.com" ;;
+        *)       hostname="${platform}" ;;
+    esac
+
     ssh-keygen -t ed25519 -C "${email_address}" -f "${HOME}/.ssh/id_ed25519_${platform}" -N ""
-    eval "$(ssh-agent -s)"
-    ssh-add "${HOME}/.ssh/id_ed25519_${platform}"
-    cat "${HOME}/.ssh/id_ed25519_${platform}.pub"
+
+    # Configure ~/.ssh/config instead of using ssh-agent
+    local ssh_config="${HOME}/.ssh/config"
+    local key_file="${HOME}/.ssh/id_ed25519_${platform}"
+
+    # Append host block only if it doesn't already exist
+    if ! grep -q "# --- ${platform} ---" "${ssh_config}" 2>/dev/null; then
+        cat >> "${ssh_config}" <<EOF
+
+# --- ${platform} ---
+Host ${hostname}
+    HostName ${hostname}
+    User git
+    IdentityFile ${key_file}
+    IdentitiesOnly yes
+EOF
+        echo ">> SSH config entry added for ${platform} (${hostname})"
+    else
+        echo ">> SSH config entry for ${platform} already exists, skipping."
+    fi
+
+    # Ensure correct permissions
+    chmod 700 "${HOME}/.ssh"
+    chmod 600 "${ssh_config}"
+    chmod 600 "${key_file}"
+    chmod 644 "${key_file}.pub"
+
+    echo ""
+    echo ">> Public key (add this to ${platform}):"
+    cat "${key_file}.pub"
 }
+
 
 function install-firebase() {
     curl https://firebase.tools | bash
