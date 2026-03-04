@@ -280,6 +280,8 @@ EOF
     echo ""
     echo ">> Public key (add this to ${platform}):"
     cat "${key_file}.pub"
+
+    # use the ssh host config
 }
 
 
