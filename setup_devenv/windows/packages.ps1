@@ -1,4 +1,5 @@
 # >>> Default tools
+winget install --id AnyDesk.AnyDesk -e --source winget
 winget install --id 7zip.7zip -e --source winget
 winget install --id calibre.calibre -e --source winget
 winget install --id dbeaver.dbeaver -e --source winget
@@ -14,8 +15,10 @@ winget install --id Microsoft.PowerShell -e --source winget
 winget install --id Microsoft.PowerToys -e --source winget
 winget install --id Microsoft.Teams -e --source winget
 winget install --id Microsoft.VCRedist.2015+.x64 -e --source winget
+winget install --id Microsoft.VCRedist.2015+.x86 -e --source winget
 winget install --id Microsoft.VisualStudioCode --override '/SILENT /mergetasks="!runcode,addcontextmenufiles,addcontextmenufolders"' -e --source winget
 winget install --id Microsoft.WindowsTerminal -e --source winget
+winget install --id Microsoft.WSL -e --source winget
 winget install --id Mobatek.MobaXterm -e --source winget
 winget install --id Mozilla.Firefox -e --source winget
 winget install --id Notepad++.Notepad++ -e --source winget

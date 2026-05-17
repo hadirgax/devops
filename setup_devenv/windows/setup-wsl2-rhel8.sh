@@ -3,6 +3,43 @@
 set -e  # exit on error
 set -x  # debug trace mode
 
+# Ensure the script is not run as root, unless explicitly calling create_user
+if [ "$EUID" -eq 0 ] && [ "$1" != "create_user" ]; then
+    echo "Error: Please do not execute commands as root."
+    echo "If you need to create a user, switch to root and run: $0 create_user <username>"
+    echo "Otherwise, run this script as your standard user with sudo privileges."
+    exit 1
+fi
+
+function create_user {
+    local username=$1
+    if [ -z "$username" ]; then
+        echo "Usage: $0 create_user <username>"
+        return 1
+    fi
+    if [ "$EUID" -ne 0 ]; then
+        echo "Error: create_user must be run as root. (e.g. via sudo or root wsl shell)"
+        return 1
+    fi
+
+    echo;echo ">>>>> Creating user ${username}... >>>>>"
+    useradd -m -s /bin/zsh "${username}"
+    passwd "${username}"
+    usermod -aG wheel "${username}"
+    
+    # Allow wheel group to use sudo without password
+    echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel_nopasswd
+    
+    # Set as default WSL user
+    cat <<EOF > /etc/wsl.conf
+[user]
+default=${username}
+EOF
+
+    echo ">>>>> User ${username} created and added to wheel group. >>>>>"
+    echo ">>>>> Please restart your WSL instance to log in as ${username}. >>>>>"
+}
+
 function main {
     # if wsl need to chenge nameserver in file /etc/resolv.conf then uncomment this:
     # set_nameserver
@@ -12,10 +49,10 @@ function main {
 
 function set_nameserver {
     echo;echo ">>>>> Setting WSL nameserver... >>>>>"
-    rm -f /etc/resolv.conf \
-        && rsync --archive --verbose --delete ${FEATURE_DIR}/wsl.conf \
-        && echo nameserver 8.8.8.8 > /etc/resolv.conf \
-        && chattr -f +i /etc/resolv.conf
+    sudo rm -f /etc/resolv.conf \
+        && sudo rsync --archive --verbose --delete ${FEATURE_DIR}/wsl.conf /etc/ \
+        && sudo bash -c 'echo nameserver 8.8.8.8 > /etc/resolv.conf' \
+        && sudo chattr -f +i /etc/resolv.conf
 }
 
 function update_and_install {
@@ -41,62 +78,60 @@ function update_and_install {
     # tar -xvpzf /tmp/${BACKUP_FILE} -C / --numeric-owner
 
     echo;echo ">>>>> Cleaning installation... >>>>>"
-    sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    sudo dnf clean all && sudo rm -rf /var/cache/dnf /tmp/* /var/tmp/*
 }
 
 function install_packages_and_tools {
-    sudo apt-get update -yq && export DEBIAN_FRONTEND=noninteractive \
-    && sudo apt-get install -q -y --no-install-recommends \
-        apt-transport-https \
-        build-essential \
+    sudo dnf update -y
+    # Install EPEL repository for extra packages (htop, p7zip, jq, etc.)
+    sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || true
+    
+    sudo dnf install -y \
         bzip2 \
         ca-certificates \
         curl \
         cmake \
-        dh-autoreconf \
-        dirmngr \
+        autoconf \
+        automake \
+        libtool \
         file \
         htop \
         jq \
         gcc \
+        gcc-c++ \
         gettext \
+        gettext-devel \
         gnupg2 \
-        libcurl4-gnutls-dev \
-        libexpat1-dev \
-        libfontconfig1 \
-        libglib2.0-0 \
-        libpcre2-dev \
-        libsm6 \
-        libssl-dev \
-        libxext6 \
-        libxrender1 \
-        libz-dev \
-        netbase \
+        libcurl-devel \
+        expat-devel \
+        fontconfig \
+        glib2 \
+        pcre2-devel \
+        libSM \
+        openssl-devel \
+        libXext \
+        libXrender \
+        zlib-devel \
         net-tools \
-        openssh-client \
-        p7zip-full \
-        procps \
-        sq \
+        openssh-clients \
+        p7zip \
+        procps-ng \
         subversion \
         sudo \
         tar \
         unzip \
         wget \
         zip \
-        zlib1g-dev \
         zsh \
-    && sudo apt-get upgrade -yq \
-    && sudo update-ca-certificates \
-    && sudo apt-get clean \
-    && sudo rm -rf /var/lib/apt/lists/*
-        # dconf-cli \# gstreamer1.0-libav \# install-info \# libatk-bridge2.0-0 \
-        # libcups2-dev \# libdbus-glib-1-2 \# libgbm-dev \# libgtk-3-0 \# libnss3-tools \
-        # libx11-xcb1 \# libxcomposite-dev \# libxkbcommon-x11-0 \# libxrandr2 \
-        # libxtst6 \# netcat \# rsync \
+        make \
+        util-linux-user
+    
+    sudo update-ca-trust
+    sudo dnf clean all
 }
 
 function install_git {
-    GIT_VERSION="2.54.0" && \
+    GIT_VERSION="2.53.0" && \
     echo;echo "Downloading source for ${GIT_VERSION}..." && \
     curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1 && \
     echo;echo "Building Git..." && \
@@ -104,15 +139,11 @@ function install_git {
     make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
     sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1 && \
     sudo rm -rf /tmp/git-${GIT_VERSION} && \
-    sudo rm -rf /var/lib/apt/lists/* && \
     git --version
-    # This configuration ensures that line endings in Git repositories are normalized to LF (Unix-style) endings,
     # git config --global core.autocrlf input
 }
 
 function configuring_oh_my_zsh() {
-    # Adapted, simplified inline Oh My Zsh! install steps that adds, defaults to a codespaces theme.
-    # See https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh for official script.
     echo ">>>>> Inside if statement oh-my-zsh configuration... >>>>>" && \
     cd ${HOME} && \
     OMZ_DIR="${HOME}/.oh-my-zsh" && \
@@ -133,7 +164,7 @@ function configuring_oh_my_zsh() {
     cd ${OMZ_DIR} && \
     git repack -a -d -f --depth=1 --window=1 && \
     sudo chsh --shell /bin/zsh ${USER} && \
-    chown -R ${UID}:${USER} ${ZSHRC_USER_FILE}
+    sudo chown -R ${UID}:${USER} ${ZSHRC_USER_FILE}
 
     # User aliases
     echo  -e "# >>> docker aliases >>>" >> ${ZSHRC_USER_FILE}
@@ -149,9 +180,9 @@ function configuring_oh_my_zsh() {
     echo  -e "alias dlog='docker logs'" >> ${ZSHRC_USER_FILE}
     echo  -e "alias dps='docker ps -a'" >> ${ZSHRC_USER_FILE}
     echo  -e "alias drm='docker rm -f'" >> ${ZSHRC_USER_FILE}
-    echo  -e "alias drma='docker rm -f $(dps --filter status=exited -q)'" >> ${ZSHRC_USER_FILE}
+    echo  -e "alias drma='docker rm -f \$(dps --filter status=exited -q)'" >> ${ZSHRC_USER_FILE}
     echo  -e "alias drmi='docker rmi -f'" >> ${ZSHRC_USER_FILE}
-    echo  -e "alias drmia='docker rmi -f $(dia -q)'" >> ${ZSHRC_USER_FILE}
+    echo  -e "alias drmia='docker rmi -f \$(dia -q)'" >> ${ZSHRC_USER_FILE}
     echo  -e "alias drun='docker run'" >> ${ZSHRC_USER_FILE}
     echo  -e "alias dstart='docker start'" >> ${ZSHRC_USER_FILE}
     echo  -e "alias dstop='docker stop'" >> ${ZSHRC_USER_FILE}
@@ -165,14 +196,14 @@ function configuring_oh_my_zsh() {
 
 function install_miniconda() {
     MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
-    MINICONDA_SHA256SUM="2284bafb7863a23411b19874d216e237964d4b32dd9beb6807fa8b2d84570961" && \
+    MINICONDA_SHA256SUM="e0b10e050e8928e2eb9aad2c522ee3b5d31d30048b8a9997663a8a460d538cef" && \
     MINICONDA_TMP_FILE=/tmp/miniconda.sh && \
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
     echo "${MINICONDA_SHA256SUM} ${MINICONDA_TMP_FILE}" > /tmp/shasum && \
     sha256sum --check --status /tmp/shasum && \
     sudo bash ${MINICONDA_TMP_FILE} -b -p $HOME/conda && \
     sudo rm /tmp/miniconda.sh /tmp/shasum && \
-    sudo chown -R $(echo $USER) $HOME/conda && \
+    sudo chown -R $USER:$USER $HOME/conda && \
     sudo ln -s $HOME/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     sudo find $HOME/conda/ -follow -type f -name '*.a' -delete && \
     sudo find $HOME/conda/ -follow -type f -name '*.js.map' -delete && \
@@ -199,19 +230,14 @@ function uninstall_miniconda() {
 
 function install_astral_uv() {
     curl -LsSf https://astral.sh/uv/install.sh | sh
-    source $HOME/.local/bin/env
 }
 
 function install_nodejs() {
-    # Download and install fnm:
     curl -o- https://fnm.vercel.app/install | bash
     source ~/.zshrc
-    # Download and install Node.js:
     fnm install 24
-    # Verify the Node.js version:
-    node -v # Should print "v24.14.0".
-    # Verify npm version:
-    npm -v # Should print "11.9.0".
+    node -v
+    npm -v
 }
 
 function install_gemini_cli() {
@@ -220,7 +246,7 @@ function install_gemini_cli() {
 
 function install-golang() {
     wget -O /tmp/go1.21.5.linux-amd64.tar.gz https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
-    rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
     go version
 }
@@ -242,7 +268,6 @@ function create_ssh_key() {
         esac
     done
 
-    # Resolve hostname from platform name
     local hostname=""
     case "${platform}" in
         github)  hostname="github.com" ;;
@@ -252,11 +277,9 @@ function create_ssh_key() {
 
     ssh-keygen -t ed25519 -C "${email_address}" -f "${HOME}/.ssh/id_ed25519_${platform}" -N ""
 
-    # Configure ~/.ssh/config instead of using ssh-agent
     local ssh_config="${HOME}/.ssh/config"
     local key_file="${HOME}/.ssh/id_ed25519_${platform}"
 
-    # Append host block only if it doesn't already exist
     if ! grep -q "# --- ${platform} ---" "${ssh_config}" 2>/dev/null; then
         cat >> "${ssh_config}" <<EOF
 
@@ -272,7 +295,6 @@ EOF
         echo ">> SSH config entry for ${platform} already exists, skipping."
     fi
 
-    # Ensure correct permissions
     chmod 700 "${HOME}/.ssh"
     chmod 600 "${ssh_config}"
     chmod 600 "${key_file}"
@@ -281,12 +303,7 @@ EOF
     echo ""
     echo ">> Public key (add this to ${platform}):"
     cat "${key_file}.pub"
-
-    # use the ssh host config
-    # ssh my-server              # uses the correct key automatically
-    # git clone git@github.com:user/repo.git   # uses the github key
 }
-
 
 function install-firebase() {
     curl https://firebase.tools | bash

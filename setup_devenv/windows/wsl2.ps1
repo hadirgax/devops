@@ -5,7 +5,7 @@ wsl.exe --install -d $WSL_DISTRO
 wsl.exe -s $WSL_DISTRO
 
 # VARIABLES
-$DEVOPS_DIR="${env:UserProfile}\workspace\devops"
+$DEVOPS_DIR="${env:UserProfile}\workspace\dev\devops"
 $FEATURE_WIN_DIR="$DEVOPS_DIR\setup_devenv\windows"
 $SETUP_FILE="setup-wsl2.sh"
 $SETUP_WIN_PATH="$FEATURE_WIN_DIR\$SETUP_FILE"
