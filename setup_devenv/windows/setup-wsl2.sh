@@ -232,6 +232,10 @@ function install-gcloud() {
 }
 
 function create_ssh_key() {
+    # Usage example:
+    #   ./setup_devenv/windows/setup-wsl2.sh create_ssh_key \
+    #   email_address=halexandergc@gmail.com \
+    #   platform=github.com
     local email_address=""
     local platform=""
 
