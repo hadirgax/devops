@@ -52,7 +52,7 @@ RUN set -eux; \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
     
-ARG GIT_VERSION=2.53.0
+ARG GIT_VERSION=2.54.0
 RUN cd /tmp && \
     curl -sOL https://mirrors.edge.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz && \
     curl -sOL https://mirrors.edge.kernel.org/pub/software/scm/git/sha256sums.asc && \
@@ -100,10 +100,10 @@ CMD [ "/bin/bash" ]
 
 ENV CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes
 ENV PATH=${USER_HOME}/conda/bin:$PATH
-ARG CONDA_VERSION=py313_25.11.1-1
+ARG CONDA_VERSION=py313_26.3.2-2
 ARG PYTHON_VERSION=3.13
 ARG MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
-ARG SHA256SUM="e0b10e050e8928e2eb9aad2c522ee3b5d31d30048b8a9997663a8a460d538cef"
+ARG SHA256SUM="2284bafb7863a23411b19874d216e237964d4b32dd9beb6807fa8b2d84570961"
 USER ${USERNAME}
 
 RUN set -x && \
