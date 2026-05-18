@@ -7,8 +7,8 @@
 - **Domain**: Developer tooling, environment setup, VSCode server, Devcontainers
 
 ## Technology Stack
-- **Languages**: Bash, PowerShell, Makefile
-- **Frameworks/Tools**: Docker, Devcontainers, miniconda, python, zsh, code-server (vscode)
+- **Languages**: Bash, PowerShell, Makefile, Go, Node.js
+- **Frameworks/Tools**: Docker, Devcontainers, miniconda, python, zsh, code-server (vscode), uv, gemini-cli, gcloud CLI, firebase CLI
 
 ## Configuration
 - `code_server/docker-compose.yml`: code-server container configuration.
@@ -24,9 +24,11 @@
 - Makefile for pulling/running code-server locally.
 
 ## External Integrations
-- GitHub (Oh My Zsh, plugins)
+- GitHub (Oh My Zsh, plugins, SSH keys)
 - Docker Hub (codercom/code-server)
-- Package Managers (apt, conda, npm, wget/curl for binaries)
+- Package Managers (apt, conda, npm, fnm, wget/curl for binaries)
+- Google Cloud (gcloud CLI)
+- Firebase (firebase CLI)
 
 ## Runtime Dependency Graph
 - `Browser → code-server :8487 (native) / :8443 (docker)`
@@ -75,5 +77,5 @@
 ./devcontainer_images/miniconda
 ```
 
-<!-- Last Updated: 2026-05-17 -->
+<!-- Last Updated: 2026-05-18 -->
 <!-- Updated By: Antigravity -->
