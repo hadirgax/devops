@@ -218,6 +218,61 @@ function install_gemini_cli() {
     npm install -g @google/gemini-cli
 }
 
+function setup_docker() {
+    echo ">>>>> Setting up Docker Engine... >>>>>"
+    
+    if command -v docker &> /dev/null; then
+        echo ">> Docker is already installed, skipping installation."
+    else
+        echo ">> Installing Docker Engine..."
+        sudo apt-get update -y
+        sudo apt-get install -y ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+        sudo apt-get update -y
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    fi
+
+    # Add user to docker group idempotently
+    if ! getent group docker > /dev/null; then
+        sudo groupadd docker
+    fi
+    
+    if ! groups ${USER} | grep -q "\bdocker\b"; then
+        echo ">> Adding ${USER} to docker group..."
+        sudo usermod -aG docker ${USER}
+        echo ">> NOTE: You will need to log out and log back in (or restart your WSL session) for the group changes to take effect."
+    else
+        echo ">> User ${USER} is already in the docker group."
+    fi
+
+    # Ensure docker service is enabled
+    if command -v systemctl &> /dev/null; then
+        echo ">> Enabling docker and containerd services..."
+        sudo systemctl enable docker.service || true
+        sudo systemctl enable containerd.service || true
+        sudo systemctl start docker.service || true
+    else
+        echo ">> systemctl not found, starting docker service..."
+        sudo service docker start || true
+    fi
+    echo ">>>>> Running Docker test image >>>>>"
+    docker run hello-world
+    
+    echo ">>>>> Docker setup complete >>>>>"
+}
+
 function install-golang() {
     wget -O /tmp/go1.21.5.linux-amd64.tar.gz https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
     rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
