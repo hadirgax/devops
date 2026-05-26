@@ -65,6 +65,7 @@ function install_packages_and_tools {
         libexpat1-dev \
         libfontconfig1 \
         libglib2.0-0 \
+        libicu-dev \
         libpcre2-dev \
         libsm6 \
         libssl-dev \
@@ -289,7 +290,7 @@ function install-gcloud() {
 function create_ssh_key() {
     # Usage example:
     #   ./setup_devenv/windows/setup-wsl2.sh create_ssh_key \
-    #   email_address=halexandergc@gmail.com \
+    #   email_address=user_email@mail.com \
     #   platform=github.com
     local email_address=""
     local platform=""

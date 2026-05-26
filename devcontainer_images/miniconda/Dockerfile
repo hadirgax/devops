@@ -30,6 +30,7 @@ RUN set -eux; \
         libexpat1-dev \
         libfontconfig1 \
         libglib2.0-0 \
+        libicu-dev \
         libpcre2-dev \
         libssl-dev \
         libz-dev \
