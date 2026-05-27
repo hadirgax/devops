@@ -9,6 +9,7 @@ winget install --id Docker.DockerDesktop -e --source winget
 winget install --id Elsevier.MendeleyReferenceManager -e --source winget
 winget install --id FastStone.Viewer -e --source winget
 winget install --id Git.Git -e --source winget
+winget install --id Google.Antigravity -e --source winget
 winget install --id Google.Chrome -e --source winget
 winget install --id Google.GoogleDrive -e --source winget
 winget install --id Microsoft.DotNet.DesktopRuntime.6 -e --source winget

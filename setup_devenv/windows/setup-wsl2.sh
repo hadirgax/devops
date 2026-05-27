@@ -57,6 +57,7 @@ function install_packages_and_tools {
         dirmngr \
         file \
         htop \
+        icu-devtools \
         jq \
         gcc \
         gettext \
