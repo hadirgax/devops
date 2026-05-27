@@ -353,5 +353,24 @@ function install-firebase() {
     exec -l $SHELL
 }
 
+function setup-gurobi-optimizer() {
+    # depends on docker
+    local GRB_VERSION="13.0.2"
+    mkdir -p /opt/gurobitst && \
+    sudo chown -R $USER:$USER /opt/gurobitst && \
+    docker create --name temp_container gurobi/optimizer:${GRB_VERSION} && \
+    docker cp temp_container:/opt/gurobi/linux /opt/gurobitst && \
+    docker rm temp_container && \
+    cat >> $HOME/.zshrc << 'EOF'
+
+# GUROBI custom variables
+export GUROBI_HOME=/opt/gurobi/linux
+export LD_LIBRARY_PATH=${GUROBI_HOME}/lib
+export GRB_LICENSE_FILE=/opt/gurobi/gurobi.lic
+export PATH=${PATH}:${GUROBI_HOME}/bin 
+EOF
+
+}
+
 $*
 # main "${@:-}"
