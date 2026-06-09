@@ -165,6 +165,15 @@ function configuring_oh_my_zsh() {
     echo "zsh" >> "${HOME}/.bashrc"
 }
 
+function install_homebrew(){
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
+    test -d ~/.linuxbrew && sudo eval "$(~/.linuxbrew/bin/brew shellenv)"
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc && \
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.zshrc
+}
+
+
 function install_miniconda() {
     MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
     MINICONDA_SHA256SUM="2284bafb7863a23411b19874d216e237964d4b32dd9beb6807fa8b2d84570961" && \
@@ -216,9 +225,6 @@ function install_nodejs() {
     npm -v # Should print "11.9.0".
 }
 
-function install_gemini_cli() {
-    npm install -g @google/gemini-cli
-}
 
 function setup_docker() {
     echo ">>>>> Setting up Docker Engine... >>>>>"
