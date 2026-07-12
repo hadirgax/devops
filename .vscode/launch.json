@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "venv pip",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "setup_devenv/python/venv_pip/venv_pip_setup.py",
+            "console": "integratedTerminal",
+            "args": [],
+            // "args": ["--python-version", "3.13"],
+            "python": "/usr/bin/python3.13"
+        }
+    ]
+}
