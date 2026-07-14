@@ -1,6 +1,6 @@
-# Automate Virtual Environments using pip
+# Automate Python Virtual Environments
 
-A virtual environment (venv) is a self-contained directory that contains a Python installation for a particular version of **Python** and **pip**, plus a number of additional packages.
+A **virtual environment (venv)** is a self-contained directory that contains a Python installation for a particular version of **Python**, plus a number of additional packages.
 
 ## Benefits of Using a Virtual Environment
 
