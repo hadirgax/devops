@@ -3,14 +3,14 @@ import site
 import sys
 import subprocess
 import tempfile
-import venv
 from argparse import ArgumentParser
 from datetime import datetime
 from pathlib import Path
-from textwrap import dedent
+
 
 RUNNING_IN_VENV = sys.prefix != sys.base_prefix
 DEFAULT_PYTHON_VERSION = "3.13.14"
+DEFAULT_PYTHON_PKG_MANAGER = "pip"
 PYTHON_FULL_VERSIONS = {
     "3.13.14": (3, 13, 14),
     "3.12.13": (3, 12, 13),
@@ -23,16 +23,19 @@ class StopException(Exception):
     """Custom exception to stop the script execution."""
     pass
 
+
 def install_python_version(version: str) -> None:
     """
     Install the specified Python version apt for Ubuntu/Debian OS.
     """
+    # TODO: to be implemented
     # sudo apt update
     # sudo apt install software-properties-common -y
     # sudo add-apt-repository ppa:deadsnakes/ppa -y
     # sudo apt update
     # Replace '3.13' with your desired version number
     # sudo apt install python3.13 python3.13-venv -y 
+
 
 def check_python_version(python_version: str) -> None:
     """
@@ -45,6 +48,7 @@ def check_python_version(python_version: str) -> None:
     except subprocess.CalledProcessError as e:
         print(f"Error: Python version {python_version} is not installed.\nERROR: {e}")
         install_python_version(python_version)
+
 
 def backup_by_rename(path: Path) -> None:
     """
@@ -113,29 +117,38 @@ def check_netrc_file():
         print(">>> `.netrc` file not found")
 
 
-def build_and_activate_venv(python_version: str):
+def build_and_activate_venv(python_version: str, pkg_manager: str):
     """Starts a susprocess with the flag --inside-venv to execute the script again inside the
     virtual environment.
     """
     print(">>> Building and activating the Python virtual environment")
     with tempfile.TemporaryDirectory() as temp_dir:
         venv_path = Path(temp_dir) / ".virtualenvs/envs/venv_temp"
-        print(f">>> Creating virtual environment at: {venv_path}")
-        venv.create(venv_path, with_pip=True)
         venv_python_path = venv_path / "bin" / "python"
-        venv_pip_path = venv_path / "bin" / "pip"
-        
-        print(">>> Installing 'rich' package in the virtual environment...")
+
+        print(f">>> Creating virtual environment at: {venv_path} and installing a package in it...")
         print("\t| If the Artifactory credentials are not configured, the installation may fail.")
         print("\t| So execute the installation script again...")
-        subprocess.run([str(venv_pip_path), "install", "rich"], check=True)
+        
+        if pkg_manager == "uv":
+            subprocess.run(["uv", "venv", str(venv_path), "--python", python_version], check=True)
+            subprocess.run(["uv", "pip", "install", "--python", str(venv_path), "numpy"], check=True)
+        elif pkg_manager == "conda":
+            ...  # TODO: to be implemented
+        elif pkg_manager == "poetry":
+            ...  # TODO: to be implemented
+        else:  # Default to pip
+            import venv
+            venv.create(venv_path, with_pip=True)
+            venv_pip_path = venv_path / "bin" / "pip"
+            subprocess.run([str(venv_pip_path), "install", "numpy"], check=True)
         
         print("Re-executing the script inside the virtual environment...")
-        script_command = [str(venv_python_path), __file__, "--python-version", python_version, "--inside-venv"]
+        script_command = [str(venv_python_path), __file__, "--python-version", python_version, "--inside-venv", "--pkg-manager", pkg_manager]
         subprocess.run(script_command, check=True)
 
 
-def copy_commands_file(python_version: str) -> None:
+def copy_commands_file(python_version: str, pkg_manager: str) -> None:
     """Creates the .virtualenvs folder with the commands file."""
     python_version_major_and_minor = '.'.join(python_version.split('.')[:2])
     if not COMMANDS_FILE_TEMPLATE_PATH.exists():
@@ -144,6 +157,9 @@ def copy_commands_file(python_version: str) -> None:
     commands_template_content = COMMANDS_FILE_TEMPLATE_PATH.read_text()
     commands_template_content = commands_template_content.replace(
         "REPLACE_PYTHON_VERSION", f"python{python_version_major_and_minor}"
+    )
+    commands_template_content = commands_template_content.replace(
+        "REPLACE_PKG_MANAGER", pkg_manager
     )
     COMMANDS_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
     COMMANDS_FILE_PATH.write_text(commands_template_content)
@@ -170,6 +186,16 @@ def main() -> None:
         action="store_true",
         help="Indicates that the script is being executed inside a virtual environment."
     )
+    parser.add_argument(
+        "--pkg-manager",
+        default=DEFAULT_PYTHON_PKG_MANAGER,
+        choices=["pip", "uv", "conda", "poetry"],
+        help=(
+            "Package manager to use for installing packages and manage virtual environments. The default "
+            "value is 'pip'. If the selected package manager is not installed, it will be installed "
+            "automatically."
+        )
+    )
 
     args = parser.parse_args()
     try:
@@ -177,7 +203,7 @@ def main() -> None:
             if not RUNNING_IN_VENV:
                 raise StopException("This script must be run inside a virtual environment.")
             
-            copy_commands_file(python_version=args.python_version)
+            copy_commands_file(python_version=args.python_version, pkg_manager=args.pkg_manager)
 
         else:
             if RUNNING_IN_VENV:
@@ -192,7 +218,7 @@ def main() -> None:
             check_certificate_chain_file()
             check_pip_conf_file()
             check_netrc_file()
-            build_and_activate_venv(python_version=args.python_version)
+            build_and_activate_venv(python_version=args.python_version, pkg_manager=args.pkg_manager)
 
     except StopException as e:
         print(f"Error: {e}")
