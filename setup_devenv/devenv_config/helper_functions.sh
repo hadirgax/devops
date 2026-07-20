@@ -6,12 +6,12 @@ set -x  # debug trace mode
 function main {
     # if wsl need to chenge nameserver in file /etc/resolv.conf then uncomment this:
     # set_nameserver
-    echo;echo ">>>>> Begin configuration >>>>>"
+    echo;echo "🚀 Begin configuration 🚀"
     update_and_install
 }
 
 function set_nameserver {
-    echo;echo ">>>>> Setting WSL nameserver... >>>>>"
+    echo;echo "⚙️ Setting WSL nameserver... ⚙️"
     rm -f /etc/resolv.conf \
         && rsync --archive --verbose --delete ${FEATURE_DIR}/wsl.conf \
         && echo nameserver 8.8.8.8 > /etc/resolv.conf \
@@ -19,18 +19,18 @@ function set_nameserver {
 }
 
 function update_and_install {
-    echo;echo ">>>>> Installing Miniconda... >>>>>"
+    echo;echo "🐍 Installing Miniconda... 🐍"
     install_miniconda
 
-    echo;echo ">>>>> Transfering backup files... >>>>> (SKIPPED)"
+    echo;echo "📦 Transfering backup files... 📦 (SKIPPED)"
     # "rsync --archive --verbose --delete ${BACKUP_FILE} ${HOME}/"
 
-    echo;echo ">>>>> Unpacking backup files... >>>>> (SKIPPED)"
+    echo;echo "📂 Unpacking backup files... 📂 (SKIPPED)"
     # sudo mkdir /workspace
     # sudo chown ${USER}:${USER} /workspace
     # tar -xvpzf /tmp/${BACKUP_FILE} -C / --numeric-owner
 
-    echo;echo ">>>>> Cleaning installation... >>>>>"
+    echo;echo "🧹 Cleaning installation... 🧹"
     sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 }
 
@@ -95,28 +95,26 @@ function install_git {
     local GIT_VERSION=$(curl -s https://git-scm.com/ | grep -oP 'class="version">\K[0-9.]+' | head -n 1)
     local CURRENT_GIT_VERSION=$(git --version)
     if [ "${CURRENT_GIT_VERSION}" != "git version ${GIT_VERSION}" ]; then
-        echo;echo ">>> Downloading source for ${GIT_VERSION}..." && \
+        echo;echo "⬇️ Downloading source for ${GIT_VERSION}..." && \
         curl -sL https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz | tar -xzC /tmp 2>&1
-        echo;echo ">>> Building Git..." && \
+        echo;echo "🔨 Building Git..." && \
         cd /tmp/git-${GIT_VERSION} && \
         make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc all && \
         sudo make -s USE_LIBPCRE=YesPlease prefix=/usr/local sysconfdir=/etc install 2>&1 && \
         sudo rm -rf /tmp/git-${GIT_VERSION} && \
         sudo rm -rf /var/lib/apt/lists/*
     else
-        echo;echo ">>> Git version ${GIT_VERSION} is already installed."
+        echo;echo "✅ Git version ${GIT_VERSION} is already installed."
     fi  
     git config --global core.autocrlf input && \
     git --version
 }
 
 function install_docker_engine() {
-    echo ">>> Installing Docker Engine..."
-    
     if command -v docker &> /dev/null; then
-        echo ">>> Docker is already installed, skipping installation."
+        echo "✅ Docker is already installed, skipping installation."
     else
-        echo ">>> Installing Docker Engine..."
+        echo "🐳 Installing Docker Engine..."
         sudo apt-get update -y
         sudo apt-get install -y ca-certificates curl
         sudo install -m 0755 -d /etc/apt/keyrings
@@ -142,27 +140,27 @@ EOF
     fi
     
     if ! groups ${USER} | grep -q "\bdocker\b"; then
-        echo ">>> Adding ${USER} to docker group..."
+        echo "➕ Adding ${USER} to docker group..."
         sudo usermod -aG docker ${USER}
-        echo ">>> NOTE: You will need to log out and log back in (or restart your WSL session) for the group changes to take effect."
+        echo "⚠️ NOTE: You will need to log out and log back in (or restart your WSL session) for the group changes to take effect."
     else
-        echo ">>> User ${USER} is already in the docker group."
+        echo "✅ User ${USER} is already in the docker group."
     fi
 
     # Ensure docker service is enabled
     # TODO: check if this systemctl is correctly done for wsl2
     if command -v systemctl &> /dev/null; then
-        echo ">>> Enabling docker and containerd services..."
+        echo "⚙️ Enabling docker and containerd services..."
         sudo systemctl enable docker.service || true
         sudo systemctl enable containerd.service || true
         sudo systemctl start docker.service || true
     else
-        echo ">>> systemctl not found, starting docker service..."
+        echo "⚠️ systemctl not found, starting docker service..."
         sudo service docker start || true
     fi
-    echo ">>> Running Docker test image..."
+    echo "🧪 Running Docker test image..."
     docker run hello-world
-    echo ">>> Docker setup complete"
+    echo "🎉 Docker setup complete"
 }
 
 function install_homebrew {
@@ -249,7 +247,7 @@ function create_ssh_key() {
         echo "Usage: create_ssh_key --email_address=<email> --platform=<platform>"
         return 1
     fi
-    echo ">>> Creating SSH key for ${email_address} on ${platform}..."
+    echo "🔑 Creating SSH key for ${email_address} on ${platform}..."
 
     # Resolve hostname from platform name
     local hostname=""
@@ -258,12 +256,12 @@ function create_ssh_key() {
         gitlab)  hostname="gitlab.com" ;;
         *)       hostname="${platform}" ;;
     esac
-    echo ">>> Creating SSH key for ${email_address} on ${hostname}..."
+    echo "🔑 Creating SSH key for ${email_address} on ${hostname}..."
 
     # Check if the ssh key already exists
     local ssh_key_file="${HOME}/.ssh/id_ed25519_${platform}"
     if [ -f "${ssh_key_file}" ]; then
-        echo ">>> SSH key already exists, skipping installation."
+        echo "✅ SSH key already exists, skipping installation."
         return 0
     fi
 
@@ -284,9 +282,9 @@ Host ${hostname}
     IdentityFile ${key_file}
     IdentitiesOnly yes
 EOF
-        echo ">> SSH config entry added for ${platform} (${hostname})"
+        echo "✅ SSH config entry added for ${platform} (${hostname})"
     else
-        echo ">> SSH config entry for ${platform} already exists, skipping."
+        echo "✅ SSH config entry for ${platform} already exists, skipping."
     fi
 
     # Ensure correct permissions
@@ -296,7 +294,7 @@ EOF
     chmod 644 "${key_file}.pub"
 
     echo ""
-    echo ">> Public key (add this to ${platform}):"
+    echo "🔑 Public key (add this to ${platform}):"
     cat "${key_file}.pub"
 
     # use the ssh host config
@@ -308,7 +306,7 @@ function install_oh_my_zsh {
     # Adapted, simplified inline Oh My Zsh! install steps that adds, defaults to a codespaces theme.
     # See https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh for official script.
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        echo ">>> Inside if statement oh-my-zsh configuration..." && \
+        echo "⚙️ Inside if statement oh-my-zsh configuration..." && \
         OMZ_DIR="$HOME/.oh-my-zsh" && \
         umask g-w,o-w && \
         mkdir -p ${OMZ_DIR} && \
@@ -328,7 +326,7 @@ function install_oh_my_zsh {
         chown -R ${UID}:${USER} ${ZSHRC_USER_FILE}
         echo "zsh" >> "${HOME}/.bashrc"
     else
-        echo ">>> Oh My Zsh is already installed, skipping installation."
+        echo "✅ Oh My Zsh is already installed, skipping installation."
     fi
 }
 

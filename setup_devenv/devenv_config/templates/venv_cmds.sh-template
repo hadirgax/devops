@@ -45,7 +45,7 @@ function venv-create() {
     deactivate
   fi
   
-  echo ">>> Creating virtual environment '$venv_name' with 'Python $python_version'..."
+  echo "✨ Creating virtual environment '$venv_name' with 'Python $python_version'..."
   if [ "$PKG_MANAGER" = "uv" ]; then
     uv venv "$venv_path" --python $python_version
   else
@@ -53,7 +53,7 @@ function venv-create() {
   fi
   
   if [ $? -eq 0 ]; then
-    echo ">>> Virtual environment '$venv_name' created successfully."
+    echo "✅ Virtual environment '$venv_name' created successfully."
   else
     echo "ERROR: Failed to create virtual environment '$venv_name'."
     return 1
@@ -107,7 +107,7 @@ function venv-ls() {
       done
       return $?
     else
-      echo ">>> No virtual environments found."
+      echo "ℹ️ No virtual environments found."
     fi
   else
     echo "ERROR: The '$venvs_dir' folder doesn't exist."
@@ -134,7 +134,7 @@ function venv-rm() {
     fi
     rm -rf "$venv_path"
     if [ $? -eq 0 ]; then
-      echo ">>> Virtual environment '$venv_name' removed successfully."
+      echo "🗑️ Virtual environment '$venv_name' removed successfully."
     else
       echo "ERROR: Failed to remove virtual environment '$venv_name'."
       return 1
