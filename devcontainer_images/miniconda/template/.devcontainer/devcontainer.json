@@ -17,6 +17,9 @@
   "customizations": {
     "vscode": {
       "settings": {
+        "workbench.colorCustomizations": {
+          "activityBar.background": "#53ab5f"
+        },
         "python.defaultInterpreterPath": "/home/devcon/conda/envs/venv/bin/python",
         "files.exclude": {
           "**/.git": true,

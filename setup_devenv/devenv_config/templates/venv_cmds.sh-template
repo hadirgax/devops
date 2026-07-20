@@ -3,7 +3,7 @@
 # Aliases for managing Python virtual environments venv with pip
 #
 
-export PKG_MANAGER=REPLACE_PKG_MANAGER
+export PKG_MANAGER="uv"
 
 # venv validation
 function _get_venv_name() {
@@ -49,7 +49,7 @@ function venv-create() {
   if [ "$PKG_MANAGER" = "uv" ]; then
     uv venv "$venv_path" --python $python_version
   else
-    REPLACE_PYTHON_VERSION -m venv "$venv_path"
+    "python${python_version}" -m venv "$venv_path"
   fi
   
   if [ $? -eq 0 ]; then

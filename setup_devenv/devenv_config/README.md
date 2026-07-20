@@ -56,51 +56,7 @@ Use pip to install packages within the activated venv:
 Remember to always activate your virtual environment before working on your project to ensure you're using the correct dependencies.
 
 
-## How to
-
-### How this scrip works
-
-```mermaid
-flowchart TB
-    A["Checks the OS platform"]
-    B["Checks the Python version"]
-    If1{"Is the correct version?"}
-    If2{"Has `--hard-reset` flag?"}
-    C["Backup Python installation"]
-    D["Checks certificate chain at `$HOME/certificate-chain.pen`"]
-    If3{"Certificate chain exists?"}
-    Da["Creates certificate chain"]
-    E["Checks `~/.pip/pip.conf`\nRemoves `user=true`from the file"]
-    F["Checks `~/.netrc`\nDisplays password prompt"]
-    G["`venv_pip_setup.py --python-version x.y --inside-venv`"]
-    H["Creates a temp venv and installs rich package"]
-
-    start((Start))-->A
-    A-->B
-    B-->If1
-    If1-- yes -->If2
-    If2-- yes -->C
-    C-->D
-    D-->If3
-    If3-- yes -->E
-    If3-- no -->Da
-    Da-->E
-    E-->F
-    F-->G
-    G-->H
-    H-->Sg
-    subgraph Sg[2nd script instance, inside venv]
-        direction TB
-        I["Checks ths OS platform"]
-        J["Explain how to use the venv script automation"]
-        K["Installs the aliases script"]
-        I-->J
-        J-->K
-    end
-    Sg-->End((End))
-    If2-- no -->End((End))
-    If1-- no -->End((End))
-```
+## How to...
 
 ### How to run the setup automation
 
