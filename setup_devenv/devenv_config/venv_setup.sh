@@ -24,7 +24,8 @@ fi
 # Add passwordless sudo for the user
 if [ ! -f "/etc/sudoers.d/90-passwordless-user" ]; then
     echo "${USER} ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/90-passwordless-user
-    echo "${USER} ALL=(ALL) NOPASSWD: /usr/bin/chsh -s * ${USER}" | sudo tee -a /etc/sudoers.d/90-passwordless-user
+    echo "${USER} ALL=(ALL) NOPASSWD: /usr/bin/chsh -s /bin/bash ${USER}, /usr/bin/chsh -s /bin/zsh ${USER}" \
+    | sudo tee -a /etc/sudoers.d/90-passwordless-user
     # sudo nano /etc/pam.d/chsh  >> sufficient pam_shells.so
     # sudo visudo >> %sudo ALL=(ALL) NOPASSWD: /usr/bin/chsh -s *
 fi
@@ -40,11 +41,23 @@ install_packages_and_tools
 install_rust
 install_git
 install_docker_engine
-install_homebrew
+# install_homebrew
 # install_miniconda
 install_astral_uv
 install_nodejs
 install_gurobi_optimizer
+install_rclone
+
+# Backup ~/.gitconfig if exists, then create a new one from template
+if [ -f "$HOME/.gitconfig" ]; then
+    cp "$HOME/.gitconfig" "$HOME/.gitconfig.bak-$(date +%Y%m%d-%H%M%S)"
+fi
+cat "$PWD/templates/.gitconfig-template" > "$HOME/.gitconfig"
+# Ask for user name and email address to create a new ~/.gitconfig file
+read -p "Enter your Git username: " GIT_USERNAME
+read -p "Enter your Git email: " GIT_EMAIL
+sed -i "s/<GIT_USERNAME>/$GIT_USERNAME/g" "$HOME/.gitconfig"
+sed -i "s/<GIT_EMAIL>/$GIT_EMAIL/g" "$HOME/.gitconfig"
 
 # Get email address from ~/.git configurations
 USER_EMAIL=$(git config --global user.email)

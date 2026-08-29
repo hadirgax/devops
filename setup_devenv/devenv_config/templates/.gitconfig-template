@@ -1,0 +1,7 @@
+[user]
+	name = <GIT_USERNAME>
+	email = <GIT_EMAIL>
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input

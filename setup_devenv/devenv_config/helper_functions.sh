@@ -151,6 +151,7 @@ EOF
     # TODO: check if this systemctl is correctly done for wsl2
     if command -v systemctl &> /dev/null; then
         echo "⚙️ Enabling docker and containerd services..."
+        sudo systemctl start docker
         sudo systemctl enable docker.service || true
         sudo systemctl enable containerd.service || true
         sudo systemctl start docker.service || true
@@ -323,7 +324,7 @@ function install_oh_my_zsh {
         BIN_ZSH_PATH=$(command -v zsh) && \
         git repack -a -d -f --depth=1 --window=1 && \
         sudo chsh --shell ${BIN_ZSH_PATH} ${USER} && \
-        chown -R ${UID}:${USER} ${ZSHRC_USER_FILE}
+        chown -R ${UID}:${USER} ${HOME}/.zshrc
         echo "zsh" >> "${HOME}/.bashrc"
     else
         echo "✅ Oh My Zsh is already installed, skipping installation."
@@ -349,4 +350,36 @@ function install-firebase() {
 }
 
 $*
+
+function install_rclone {
+    sudo -v ; curl https://rclone.org/install.sh | sudo bash
+    
+    # Configure rclone with your cloud storage provider.
+    # ```bash
+    # rclone config
+    # ```
+
+    # To get changes made on your remote drive down to your local drive, you just need to reverse
+    # the order of the source and destination in your command.
+    # In rclone, the syntax is always rclone [command] [source] [destination].
+
+    #The Commands
+    # * To download safely without deleting local files:
+    #   ```bash
+    #   rclone copy remote:your-folder-name /path/to/local/folder --progress
+    #   ```
+    # * To make your local folder an exact mirror of the remote
+    #   (WARNING: deletes local files not on the remote):
+    #   ```bash
+    #   rclone sync remote:your-folder-name /path/to/local/folder --progress
+    #   ```
+
+    # Safety Best Practice
+    # Always use the `--dry-run` flag first. This simulates the transfer without moving or
+    # deleting anything, so you can see exactly what will happen.
+    #   ```bash
+    #   rclone sync remote:your-folder-name /path/to/local/folder --dry-run
+    #   ```
+}
+
 # main "${@:-}"
