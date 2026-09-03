@@ -18,23 +18,8 @@ function set_nameserver {
         && chattr -f +i /etc/resolv.conf
 }
 
-function update_and_install {
-    echo;echo "🐍 Installing Miniconda... 🐍"
-    install_miniconda
-
-    echo;echo "📦 Transfering backup files... 📦 (SKIPPED)"
-    # "rsync --archive --verbose --delete ${BACKUP_FILE} ${HOME}/"
-
-    echo;echo "📂 Unpacking backup files... 📂 (SKIPPED)"
-    # sudo mkdir /workspace
-    # sudo chown ${USER}:${USER} /workspace
-    # tar -xvpzf /tmp/${BACKUP_FILE} -C / --numeric-owner
-
-    echo;echo "🧹 Cleaning installation... 🧹"
-    sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-}
-
 function install_packages_and_tools {
+    echo;echo "📦 Installing packages and tools... 📦"
     sudo apt-get update -yq && export DEBIAN_FRONTEND=noninteractive \
     && sudo apt-get install -q -y --no-install-recommends \
         apt-transport-https \
@@ -78,9 +63,10 @@ function install_packages_and_tools {
         zlib1g-dev \
         zsh \
     && sudo apt-get upgrade -yq \
-    && sudo update-ca-certificates \
-    && sudo apt-get clean \
-    && sudo rm -rf /var/lib/apt/lists/*
+    && sudo update-ca-certificates
+
+    echo;echo "🧹 Cleaning installation... 🧹"
+    sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
         # dconf-cli \# gstreamer1.0-libav \# install-info \# libatk-bridge2.0-0 \
         # libcups2-dev \# libdbus-glib-1-2 \# libgbm-dev \# libgtk-3-0 \# libnss3-tools \
         # libx11-xcb1 \# libxcomposite-dev \# libxkbcommon-x11-0 \# libxrandr2 \

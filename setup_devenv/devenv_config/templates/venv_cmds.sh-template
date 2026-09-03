@@ -31,47 +31,61 @@ function _get_venv_name() {
 }
 
 # Activate a virtual environment using the supplied venv_name or using the current
-# directory basename (no arguments)
+# directory basename (no arguments). Use "." to activate the local .venv.
 function venv() {
   local venv_name
-  _get_venv_name "$1" venv_name || return 1
-  local venv_path="$HOME/.virtualenvs/envs/$venv_name/bin/activate"
+  local venv_path
+  if [ "$1" = "." ]; then
+    venv_name=".venv"
+    venv_path="$PWD/$venv_name/bin/activate"
+  else
+    _get_venv_name "$1" venv_name || return 1
+    venv_path="$HOME/.virtualenvs/envs/$venv_name/bin/activate"
+  fi
   if [ -f "$venv_path" ]; then
     source "$venv_path"
     return $?
   else
     echo "🛑 ERROR: Virtual environment '$venv_name' does not exist."
+    echo "⭐ USAGE: Run 'venv-create .' to create a local virtual environment first."
     return 1
   fi
 }
 
-# Create a new virtual environment with the supplied venv_name
+# Create a new virtual environment with the supplied venv_name.
+# Use "." to create a local .venv in the current directory.
 function venv-create() {
-  local venv_name
-  _get_venv_name "$1" venv_name || return 1
   local python_version=$(cat .python-version 2>/dev/null || echo "$PYTHON_VERSION")
-  local venv_path="$HOME/.virtualenvs/envs/$venv_name"
+  local venv_activate
+  local venv_name
+  local venv_path
+  if [ "$1" = "." ]; then
+    venv_activate="."
+    venv_name=".venv"
+    venv_path="$PWD/$venv_name"
+  else
+    _get_venv_name "$1" venv_name || return 1
+    venv_activate="$venv_name"
+    venv_path="$HOME/.virtualenvs/envs/$venv_name"
+  fi
   if [ -d "$venv_path" ]; then
     echo "🛑 ERROR: Virtual environment '$venv_name' already exists."
     return 1
   fi
   [ "$VIRTUAL_ENV" = "$venv_path" ] && deactivate
-  
   echo "⚙️ Creating virtual environment '$venv_name' with 'Python $python_version'..."
   if [ "$PKG_MANAGER" = "uv" ]; then
     uv venv "$venv_path" --python $python_version
   else
     "python${python_version}" -m venv "$venv_path"
   fi
-  
   if [ $? -eq 0 ]; then
     echo "✅ Virtual environment '$venv_name' created successfully."
   else
     echo "🛑 ERROR: Failed to create virtual environment '$venv_name'."
     return 1
   fi
-
-  venv "$venv_name"
+  venv "$venv_activate"
   return $?
 }
 
@@ -84,38 +98,56 @@ function venv-on () {
 }
 
 
-# Lists all the available virtual environments
+# Lists all the available virtual environments (global and local .venv)
 function venv-ls() {
   local venvs_dir="$HOME/.virtualenvs/envs"
+  local has_envs=false
+
+  # List global virtual environments
   if [ -d "$venvs_dir" ]; then
     local envs
     envs=$(find "$venvs_dir" -maxdepth 1 -mindepth 1 -type d 2>/dev/null)
     if [ -n "$envs" ]; then
+      has_envs=true
       echo "✨ Available virtual environments:"
       echo "$envs" | sort | while read -r venv; do
         if [ -n "$venv" ]; then
           echo "💠 $(basename "$venv")"
         fi
       done
-      return $?
-    else
-      echo "⚠️ No virtual environments found."
     fi
-  else
-    echo "🛑 ERROR: The '$venvs_dir' folder doesn't exist."
+  fi
+
+  # Check for local .venv in the current directory
+  if [ -d "$PWD/.venv" ]; then
+    has_envs=true
+    echo "📍 Local virtual environment:"
+    echo "💠 .venv  ($PWD/.venv)"
+  fi
+
+  if [ "$has_envs" = false ]; then
+    echo "⚠️ No virtual environments found."
   fi
 }
 
 
-# Deactivate and remove the virtual environment with the supplied venv_name
+# Deactivate and remove the virtual environment with the supplied venv_name.
+# Use "." to remove the local .venv in the current directory.
 function venv-rm() {
   local venv_name
+  local venv_path
   if [ -z "$VIRTUAL_ENV" ]; then
-    _get_venv_name "$1" venv_name || return 1
+    if [ "$1" = "." ]; then
+      venv_name=".venv"
+      venv_path="$PWD/$venv_name"
+    else
+      _get_venv_name "$1" venv_name || return 1
+      venv_path="$HOME/.virtualenvs/envs/$venv_name"
+    fi
   else
     venv_name=$(basename "$VIRTUAL_ENV")
+    venv_path="$VIRTUAL_ENV"
   fi
-  local venv_path="$HOME/.virtualenvs/envs/$venv_name"
   if [ -d "$venv_path" ]; then
     [ "$VIRTUAL_ENV" = "$venv_path" ] && deactivate
     rm -rf "$venv_path"
@@ -135,13 +167,19 @@ function venv-rm() {
 }
 
 
-# Change directory to the virtual environment directory with the supplied venv_name
+# Change directory to the virtual environment directory with the supplied venv_name.
+# Use "." to cd into the local .venv in the current directory.
 function venv-cd() {
   local venv_name
   local venv_path
   if [ -z "$VIRTUAL_ENV" ]; then
-    _get_venv_name "$1" venv_name || return 1
-    venv_path="$HOME/.virtualenvs/envs/$venv_name"
+    if [ "$1" = "." ]; then
+      venv_name=".venv"
+      venv_path="$PWD/$venv_name"
+    else
+      _get_venv_name "$1" venv_name || return 1
+      venv_path="$HOME/.virtualenvs/envs/$venv_name"
+    fi
   else
     venv_path="$VIRTUAL_ENV"
   fi
@@ -151,4 +189,19 @@ function venv-cd() {
     echo "🛑 ERROR: Virtual environment '$venv_name' does not exist."
     return 1
   fi
+}
+
+
+function venv-help() {
+  cat << EOF
+🐍 Python Virtual Environment Management Commands:
+  venv <venv_name>        - Activate the virtual environment with the supplied name.
+  venv-create <venv_name> - Create a new virtual environment with the supplied name.
+  venv-rm <venv_name>     - Deactivate and remove the virtual environment with the supplied name.
+  venv-cd <venv_name>     - Change directory to the virtual environment directory with the supplied name.
+  venv-ls                 - List all available virtual environments (global and local .venv).
+  venv-on                 - Show the name of the currently activated virtual environment.
+  venv-help               - Show this help message.
+  Use "." as <venv_name> to refer to the local .venv in the current directory.
+EOF
 }
