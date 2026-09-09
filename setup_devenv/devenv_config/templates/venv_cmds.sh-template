@@ -35,15 +35,17 @@ function _get_venv_name() {
 function venv() {
   local venv_name
   local venv_path
+  local venv_activate
   if [ "$1" = "." ]; then
     venv_name=".venv"
-    venv_path="$PWD/$venv_name/bin/activate"
+    venv_path="$PWD/$venv_name"
   else
     _get_venv_name "$1" venv_name || return 1
-    venv_path="$HOME/.virtualenvs/envs/$venv_name/bin/activate"
+    venv_path="$HOME/.virtualenvs/envs/$venv_name"
   fi
-  if [ -f "$venv_path" ]; then
-    source "$venv_path"
+  venv_activate="$venv_path/bin/activate"
+  if [ -f "$venv_activate" ]; then
+    source "$venv_activate"
     return $?
   else
     echo "🛑 ERROR: Virtual environment '$venv_name' does not exist."
@@ -112,7 +114,7 @@ function venv-ls() {
       echo "✨ Available virtual environments:"
       echo "$envs" | sort | while read -r venv; do
         if [ -n "$venv" ]; then
-          echo "💠 $(basename "$venv")"
+          echo "  💠 $(basename "$venv")"
         fi
       done
     fi
@@ -122,7 +124,7 @@ function venv-ls() {
   if [ -d "$PWD/.venv" ]; then
     has_envs=true
     echo "📍 Local virtual environment:"
-    echo "💠 .venv  ($PWD/.venv)"
+    echo "  💠 .venv  ($PWD/.venv)"
   fi
 
   if [ "$has_envs" = false ]; then
