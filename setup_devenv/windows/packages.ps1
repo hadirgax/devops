@@ -11,7 +11,8 @@ winget install --id Git.Git -e --source winget
 winget install --id Google.Antigravity -e --source winget
 winget install --id Google.Chrome -e --source winget
 winget install --id Google.GoogleDrive -e --source winget
-winget install --id Microsoft.DotNet.DesktopRuntime.6 -e --source winget
+winget install --id Microsoft.DotNet.DesktopRuntime.10 -e --source winget
+winget install --id Microsoft.DotNet.AspNetCore.8 -e --source winget
 winget install --id Microsoft.OneDrive -e --source winget
 winget install --id Microsoft.PowerShell -e --source winget
 winget install --id Microsoft.Teams -e --source winget
