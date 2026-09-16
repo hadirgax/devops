@@ -99,7 +99,6 @@ function venv-on () {
     echo "$on"
 }
 
-
 # Lists all the available virtual environments (global and local .venv)
 function venv-ls() {
   local venvs_dir="$HOME/.virtualenvs/envs"
@@ -118,6 +117,8 @@ function venv-ls() {
         fi
       done
     fi
+  else
+    echo "🛑 ERROR: The '$venvs_dir' folder doesn't exist."
   fi
 
   # Check for local .venv in the current directory
@@ -131,7 +132,6 @@ function venv-ls() {
     echo "⚠️ No virtual environments found."
   fi
 }
-
 
 # Deactivate and remove the virtual environment with the supplied venv_name.
 # Use "." to remove the local .venv in the current directory.
@@ -168,7 +168,6 @@ function venv-rm() {
   fi
 }
 
-
 # Change directory to the virtual environment directory with the supplied venv_name.
 # Use "." to cd into the local .venv in the current directory.
 function venv-cd() {
@@ -192,8 +191,7 @@ function venv-cd() {
     return 1
   fi
 }
-
-
+# Show help message for venv commands.
 function venv-help() {
   cat << EOF
 🐍 Python Virtual Environment Management Commands:
