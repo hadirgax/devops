@@ -2,6 +2,7 @@
 winget install --id 7zip.7zip -e --source winget
 winget install --id alexx2000.DoubleCommander -e --source winget
 winget install --id AnyDesk.AnyDesk -e --source winget
+winget install --id Bitwarden.Bitwarden -e --source winget
 winget install --id calibre.calibre -e --source winget
 winget install --id dbeaver.dbeaver -e --source winget
 winget install --id Elsevier.MendeleyReferenceManager -e --source winget
