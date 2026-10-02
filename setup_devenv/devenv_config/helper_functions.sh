@@ -158,7 +158,7 @@ function install_homebrew {
 
 function install_miniconda {
     MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" && \
-    MINICONDA_SHA256SUM="2284bafb7863a23411b19874d216e237964d4b32dd9beb6807fa8b2d84570961" && \
+    MINICONDA_SHA256SUM="e8b25b92b262499141c5bd57a98d3c008024185fa951494b9cd9b6d94e72338b" && \
     MINICONDA_TMP_FILE=/tmp/miniconda.sh && \
     wget "${MINICONDA_URL}" -O ${MINICONDA_TMP_FILE} -q && \
     echo "${MINICONDA_SHA256SUM} ${MINICONDA_TMP_FILE}" > /tmp/shasum && \
