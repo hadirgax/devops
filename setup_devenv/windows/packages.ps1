@@ -28,6 +28,7 @@ winget install --id SMPlayer.SMPlayer -e --source winget
 winget install --id Spotify.Spotify -e --source winget
 winget install --id Tarma.PublishOrPerish -e --source winget
 winget install --id TrackerSoftware.PDF-XChangeEditor -e --source winget
+winget install --id Wacom.WacomTabletDriver -e --source winget
 winget install --id Zoom.Zoom -e --source winget
 
 #>>> Optional and interesting stuff
@@ -53,7 +54,6 @@ winget install --id Zoom.Zoom -e --source winget
 # winget install --id OpenWhisperSystems.Signal -e --source winget
 # winget install --id PuTTY.PuTTY -e --source winget
 # winget install --id Stoplight.Studio -e --source winget
-# winget install --id Wacom.WacomTabletDriver -e --source winget
 
 # Other urls to download packages
 # ==============================
