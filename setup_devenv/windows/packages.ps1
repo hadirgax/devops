@@ -11,7 +11,6 @@ winget install --id Google.Chrome -e --source winget
 winget install --id Google.GoogleDrive -e --source winget
 winget install --id Microsoft.DotNet.DesktopRuntime.10 -e --source winget
 winget install --id Microsoft.DotNet.AspNetCore.8 -e --source winget
-winget install --id Microsoft.OneDrive -e --source winget
 winget install --id Microsoft.PowerShell -e --source winget
 winget install --id Microsoft.Teams -e --source winget
 winget install --id Microsoft.VCRedist.2015+.x64 -e --source winget
@@ -27,6 +26,7 @@ winget install --id Postman.Postman -e --source winget
 winget install --id SMPlayer.SMPlayer -e --source winget
 winget install --id Spotify.Spotify -e --source winget
 winget install --id Tarma.PublishOrPerish -e --source winget
+winget install --id TheDocumentFoundation.LibreOffice -e --source winget
 winget install --id TrackerSoftware.PDF-XChangeEditor -e --source winget
 winget install --id Wacom.WacomTabletDriver -e --source winget
 winget install --id Zoom.Zoom -e --source winget
@@ -47,6 +47,7 @@ winget install --id Zoom.Zoom -e --source winget
 # winget install --id Maximus5.ConEmu -e --source winget
 # winget install --id Microsoft.Azd -e --source winget
 # winget install --id Microsoft.AzureCLI -e --source winget
+# winget install --id Microsoft.OneDrive -e --source winget
 # winget install --id Microsoft.PowerToys -e --source winget
 # winget install --id Mobatek.MobaXterm -e --source winget
 # winget install --id Neovim.Neovim -e --source winget
