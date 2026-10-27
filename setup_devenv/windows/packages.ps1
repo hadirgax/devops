@@ -11,6 +11,7 @@ winget install --id Google.Chrome -e --source winget
 winget install --id Google.GoogleDrive -e --source winget
 winget install --id Microsoft.DotNet.DesktopRuntime.10 -e --source winget
 winget install --id Microsoft.DotNet.AspNetCore.8 -e --source winget
+winget install --id Microsoft.DotNet.AspNetCore.10 -e --source winget
 winget install --id Microsoft.PowerShell -e --source winget
 winget install --id Microsoft.Teams -e --source winget
 winget install --id Microsoft.VCRedist.2015+.x64 -e --source winget
